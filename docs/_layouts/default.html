@@ -46,7 +46,7 @@
   <link rel="stylesheet" href="{{ main }}/assets/site.css">
   <script src="{{ main }}/assets/site-chrome.js" defer></script>
 </head>
-<body data-kb-page>
+<body data-section="{{ site.section_id }}">
 
 <header class="site-header" data-site-header>
   <div class="wrap">
@@ -76,8 +76,8 @@
 
   <main class="docs-main">
     <p class="docs-crumbs">
-      <a href="{{ main }}/knowledge-base/">Knowledge base</a><span>/</span>
-      {%- if site.category_name %}<a href="{{ main }}/knowledge-base/#{{ site.category_id }}">{{ site.category_name }}</a><span>/</span>{% endif -%}
+      <a href="{{ main }}/">Home</a><span>/</span>
+      {%- if site.section_name %}<a href="{{ main }}/{{ site.section_url }}">{{ site.section_name }}</a><span>/</span>{% endif -%}
       {%- if is_home %}{{ site.app_name }}{% else %}<a href="{{ '/' | relative_url }}">{{ site.app_name }}</a>{% endif -%}
       {%- if page.parent %}{% assign par = tops | where: "title", page.parent | first %}{% if par %}<span>/</span><a href="{{ par.url | relative_url }}">{{ par.title }}</a>{% endif %}{% endif %}
     </p>

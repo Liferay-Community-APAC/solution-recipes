@@ -3,7 +3,9 @@ app_name: Solution Recipes
 description: Step-by-step recipes that combine Liferay Community APAC Marketplace Apps, tutorials and Liferay DXP features to build a complete use case.
 baseurl: /solution-recipes
 
-# Recipes sit directly under the knowledge base, so there's no category in the breadcrumbs.
+# The site section the docs belong to: the menu highlights it. Solution Recipes is a section of its own,
+# so the breadcrumbs go straight from Home to the recipes.
+section_id: solution-recipes
 
 url: https://liferay-community-apac.github.io
 lang: en
