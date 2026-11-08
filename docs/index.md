@@ -10,7 +10,7 @@ description: Step-by-step recipes that combine Liferay Community APAC apps, tuto
 Each recipe combines apps, tutorials and Liferay DXP features into one working use case: what you'll build, the ingredients you need, and the steps to put them together.
 
 {: .important }
-Recipes are unofficial guides shared by the Liferay Customer Success APAC team, like the [apps and tutorials](https://liferay-community-apac.github.io/) they use. Test them in a non-production environment before relying on them.
+Recipes are unofficial guides, like the [apps and tutorials](https://liferay-community-apac.github.io/) they use. Test them in a non-production environment before relying on them.
 
 ## Recipes
 
