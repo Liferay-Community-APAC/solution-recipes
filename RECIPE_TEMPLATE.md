@@ -20,7 +20,7 @@ One or two sentences on the use case and the end result, for example: *a communi
 
 | Ingredient | Type | Guide |
 | --- | --- | --- |
-| An app, such as Liferay Forums | Marketplace app | [Liferay Forums guide](/liferay-forums/) |
+| A Marketplace App, such as Liferay Forums | Marketplace App | [Liferay Forums guide](/liferay-forums/) |
 | A tutorial, such as the EC2 guide | Tutorial | [Liferay DXP self-hosted on Amazon EC2](https://github.com/Liferay-Community-APAC/lfrgs-sh-aws-ec2-tutorial) |
 | A Liferay DXP feature | DXP feature | A page on [learn.liferay.com](https://learn.liferay.com/) |
 
@@ -32,9 +32,9 @@ Also list what readers need before they start, such as the Liferay DXP version a
 
 What to do first, linking to the ingredient's own guide instead of repeating it.
 
-### Step 2: Add the App
+### Step 2: Add the Marketplace App
 
-How to install and configure the app for this use case.
+How to install and configure the Marketplace App for this use case.
 
 ### Step 3: Bring It Together
 
