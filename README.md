@@ -1,6 +1,6 @@
 # Solution Recipes
 
-Step-by-step recipes that combine Liferay Community APAC apps, tutorials and Liferay DXP features to build a
+Step-by-step recipes that combine Liferay Community APAC Marketplace Apps, tutorials and Liferay DXP features to build a
 complete use case, published at <https://liferay-community-apac.github.io/solution-recipes/>.
 
 The recipes are Markdown pages in `docs/`, built with Jekyll and published by the shared Liferay Community APAC
