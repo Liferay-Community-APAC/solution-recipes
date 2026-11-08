@@ -1,0 +1,29 @@
+# Settings for the Solution Recipes site.
+app_name: Solution Recipes
+description: Step-by-step recipes that combine Liferay Community APAC apps, tutorials and Liferay DXP features to build a complete use case.
+baseurl: /solution-recipes
+
+# Recipes sit directly under the knowledge base, so there's no category in the breadcrumbs.
+
+url: https://liferay-community-apac.github.io
+lang: en
+# The main site the header, footer, styles and search come from. Leave it empty on the live site;
+# set it to the full address (https://liferay-community-apac.github.io) to preview the docs on their own.
+main_site: ""
+
+plugins:
+  - jekyll-sitemap      # writes sitemap.xml; the main site lists it in robots.txt via data/apps.json
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  auto_ids: true
+  hard_wrap: false
+  syntax_highlighter_opts:
+    disable: true
+
+defaults:
+  - scope: { path: "" }
+    values: { layout: default }
+
+exclude: [README.md, RECIPE_TEMPLATE.md, Gemfile, Gemfile.lock, vendor]
