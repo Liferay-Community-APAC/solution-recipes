@@ -82,7 +82,7 @@ The chat runs on the forum's pages and searches the forum as the signed-in membe
     | LPD-107054 | The connection to AI Hub: the *AI Hub* settings in *Instance Settings* (Step 3), and the sign-in the chat uses for members |
     | LPD-93555 | AI Hub's searches of the forum as the signed-in member, so the chat only finds what that member can see |
 
-    The **AI Hub Chat** fragment loads AI Hub's own chat, so you don't need other AI Hub backports for this recipe.
+    The **AI Hub Chat** fragment loads AI Hub's own chat, so you don't need other AI Hub backports for this recipe. If you also add the [AI Discussion Summaries](../forums-ai-summaries/), ask for LPD-107058 in the same ticket: the summaries run their agent in a workflow step it adds.
 
     Liferay Support provides it as a hotfix or as the update that includes it. AI Hub is in beta on 2026.Q1 and backports are in progress, so a later 2026.Q1 update may include them: check with Liferay Support. On 2026.Q3 and later, where AI Hub is generally available, skip this step.
 1. **On 2026.Q1, turn on the feature flag:** *Control Panel* → *Instance Settings* → *Feature Flags* → *Release*, then enable **AI Hub (LPD-62272)**. On Liferay Self-Hosted, you can set it in `portal-ext.properties` instead:

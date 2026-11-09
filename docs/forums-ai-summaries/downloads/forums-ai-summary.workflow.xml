@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!--
+SPDX-FileCopyrightText: (c) 2026 Liferay, Inc. https://liferay.com
+SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
+
+Forums AI Summary: writes one discussion's AI summary. The summary service starts it for each
+discussion that needs a summary, with the discussion as "request". The AI Hub agent node runs the
+Forums Discussion Summary agent through this Liferay's AI Hub connection (Instance Settings, AI Hub),
+and the save state calls the summary service's workflow action, which saves the summary.
+
+If AI Hub gave the agent another external reference code, change
+agent-definition-external-reference-code below.
+-->
+
+<workflow-definition
+	xmlns="urn:liferay.com:liferay-workflow_7.4.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:liferay.com:liferay-workflow_7.4.0 http://www.liferay.com/dtd/liferay-workflow-definition_7_4_0.xsd"
+>
+	<name>Forums AI Summary</name>
+	<description>Writes a forum discussion's AI summary with the Forums Discussion Summary agent in AI Hub, and saves it.</description>
+	<version>1</version>
+	<state>
+		<name>start</name>
+		<initial>true</initial>
+		<labels>
+			<label language-id="en_US">Start</label>
+		</labels>
+		<transitions>
+			<transition>
+				<labels>
+					<label language-id="en_US">Summarize</label>
+				</labels>
+				<name>summarize</name>
+				<target>summarize</target>
+				<default>true</default>
+			</transition>
+		</transitions>
+	</state>
+	<ai-hub-agent>
+		<name>summarize</name>
+		<labels>
+			<label language-id="en_US">Summarize</label>
+		</labels>
+		<agent-definition-external-reference-code>FORUMS_DISCUSSION_SUMMARY</agent-definition-external-reference-code>
+		<timeout>300000</timeout>
+		<transitions>
+			<transition>
+				<labels>
+					<label language-id="en_US">Save</label>
+				</labels>
+				<name>save</name>
+				<target>save</target>
+				<default>true</default>
+			</transition>
+		</transitions>
+	</ai-hub-agent>
+	<state>
+		<name>save</name>
+		<actions>
+			<action>
+				<name>save-summary</name>
+				<script><![CDATA[]]></script>
+				<script-language>function#liferay-forums-ai-summary-etc-spring-boot-workflow-action</script-language>
+				<execution-type>onEntry</execution-type>
+			</action>
+		</actions>
+		<labels>
+			<label language-id="en_US">Saved</label>
+		</labels>
+	</state>
+</workflow-definition>
