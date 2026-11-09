@@ -10,7 +10,7 @@ description: Add a Liferay AI Hub chat assistant to Liferay Forums that finds fo
 {: .no_toc }
 
 {: .important }
-Liferay AI Hub is in beta: [request access](https://learn.liferay.com/w/ai-hub/index) before you start. On Liferay DXP 2026.Q1, this recipe also needs the AI Hub cell, which you request from Liferay Support (Step 2).
+Liferay AI Hub is in beta: [request access](https://learn.liferay.com/w/ai-hub/index) before you start. On Liferay DXP 2026.Q1, check with Liferay Support that your update can connect to AI Hub (Step 2).
 
 1. TOC
 {:toc}
@@ -32,9 +32,8 @@ AI summaries at the top of each discussion come in a later version of this recip
 | --- | --- | --- |
 | Liferay Forums 1.0.0 | Marketplace App | [Liferay Forums guide](/liferay-forums/) |
 | Liferay AI Hub: an agent and a chatbot | Liferay product (beta) | [AI Hub](https://learn.liferay.com/w/ai-hub/index), [Agent Workflows](https://learn.liferay.com/w/ai-hub/agent-workflows), [Chatbots](https://learn.liferay.com/w/ai-hub/chatbots) |
-| AI Hub cell on Liferay DXP 2026.Q1 | DXP feature (backport) | Liferay Support, as in [Step 2](#step-2-get-the-ai-hub-cell) |
+| Liferay DXP connected to AI Hub | DXP feature | [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp) |
 | Fragments and master pages | DXP feature | [Managing Fragments](https://learn.liferay.com/w/dxp/site-building/creating-pages/page-fragments-and-widgets/using-fragments/managing-fragments), [Master Page Templates](https://learn.liferay.com/w/dxp/site-building/creating-pages/defining-headers-and-footers/master-page-templates) |
-| Cross-origin resource sharing (CORS) | DXP feature | [Setting Up CORS](https://learn.liferay.com/w/dxp/security-and-administration/security/securing-web-services/setting-up-cors) |
 
 **Downloads:**
 
@@ -48,9 +47,9 @@ Both are available under the same licenses as Liferay Forums: [LGPL-2.1-or-later
 **Before you start, you need:**
 
 - Liferay DXP 2026.Q1 LTS with Liferay Forums 1.0.0 installed and its forum site created. This recipe was tested on 2026.Q1.4 with hotfix 84 and PostgreSQL.
-- An AI Hub account, and its manager's sign-in.
+- An AI Hub account, with the **Client ID** and **Client Secret** Liferay provided for it.
 - Administrator access to the forum's Liferay.
-- Network access both ways: AI Hub must reach the forum's Liferay, and members' browsers must reach AI Hub.
+- The forum's Liferay reachable from the internet, so AI Hub can reach it. For testing on your own computer, see the note on tunnels in [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp).
 
 ## Steps
 
@@ -60,30 +59,28 @@ Install Liferay Forums and create the forum site as the [Liferay Forums guide](/
 
 Once the site exists, remove the site initializer zip as the guide says. If it stays deployed, it runs again at every Liferay start and resets the site's templates and master page, including the chat you add in Step 6.
 
-### Step 2: Get the AI Hub Cell
+### Step 2: Enable AI Hub on the Forum's Liferay
 
-AI Hub's chat signs members in through the Liferay page it's on, so the forum's Liferay must be an **AI Hub cell**. Liferay DXP 2026.Q3 includes the cell. For 2026.Q1, ask Liferay Support for:
+The chat runs on the forum's pages and searches the forum as the signed-in member, so the forum's Liferay must be connected to AI Hub. [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp) describes the connection.
 
-1. **The AI Hub cell backport** (LPD-93555 and LPD-107054) for your 2026.Q1 update, as a hotfix or as the update that includes it.
-1. **Feature flag LPD-62272** turned on. On Liferay Self-Hosted, that's this line in `portal-ext.properties`:
+1. **On Liferay DXP 2026.Q1, ask Liferay Support** whether your update supports connecting to AI Hub, and how to get that support if it doesn't. Later quarterly releases may include it already.
+1. **Turn on the feature flag:** *Control Panel* → *Instance Settings* → *Feature Flags* → *Release*, then enable **AI Hub (LPD-62272)**. On Liferay Self-Hosted, you can set it in `portal-ext.properties` instead:
 
    ```properties
    feature.flag.LPD-62272=true
    ```
 
 {: .note }
-This recipe was tested with test builds of the cell's modules on 2026.Q1.4, not with the official backport, so names in the backport's settings may differ slightly.
+This recipe was tested on 2026.Q1.4 with a pre-release build of the AI Hub connection, so some labels may differ slightly in your version.
 
 ### Step 3: Connect the Forum's Liferay to AI Hub
 
-1. In AI Hub, as the account's manager, open the account's **Configurations**:
-    - Copy the **client ID** and **client secret**.
-    - Set the **Liferay DXP URL** to the forum's Liferay, at the address AI Hub reaches it, such as `https://forums.example.com`. AI Hub searches the forum at this address.
-1. In the forum's Liferay, go to *Control Panel* → *Instance Settings* → *AI Hub* → **AI Hub Cell**. Enter AI Hub's address (**Service URL**, with no trailing slash), the **Client ID** and the **Client Secret**, then click **Save**. Liferay creates an OAuth application for the cell.
-1. If AI Hub reaches the forum's Liferay at a host name that Liferay doesn't serve, such as an internal name, add it to the valid host names in `portal-ext.properties`, keeping the ones you already use. Otherwise the chat's searches fail with *Invalid host name*.
+1. In the forum's Liferay, go to *Control Panel* → *Instance Settings*, and under *Platform* click **AI Hub**. Enter the **Client ID** and **Client Secret** Liferay provided, and the AI Hub **Service URL** given in [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp). Click **Save**.
+1. In AI Hub, click **Configurations**. In **Environment URLs**, add the forum's address, such as `https://forums.example.com`, and click **Save**. AI Hub uses this address to search the forum and to let the chat load on the forum's pages.
+1. If the forum's Liferay doesn't serve the host name in that address yet, add it to the valid host names in `portal-ext.properties`, keeping the ones you already use. Otherwise the chat's searches fail with *Invalid host name*.
 
    ```properties
-   virtual.hosts.valid.hosts=localhost,127.0.0.1,forums.internal.example.com
+   virtual.hosts.valid.hosts=localhost,127.0.0.1,forums.example.com
    ```
 
 ### Step 4: Create the Forums Discussion Finder Agent
@@ -135,18 +132,6 @@ Save it. Its page then shows the **Chatbot Code**. You need two values from it i
 
 ### Step 6: Add the Chat to the Forum Site
 
-1. **Allow the forum's address in AI Hub.** The chat calls AI Hub from the member's browser, on the forum's pages, so AI Hub must allow the forum's address (CORS). Add the forum's address, such as `https://forums.example.com`, to your AI Hub account's environment URLs. AI Hub keeps its CORS settings in step with them.
-
-    {: .tip }
-    If you run AI Hub yourself, check its CORS entry in *Instance Settings* → *Security Tools* → **Portal Cross-Origin Resource Sharing (CORS)**. For the URL pattern `/o/ai-hub/*`, it needs these headers, with your forum's address as the origin. Separate the values with commas and **no spaces**: with spaces, only the first value matches. `Access-Control-Allow-Credentials` must be `true` because the chat's live updates send credentials.
-
-   ```text
-   Access-Control-Allow-Credentials: true
-   Access-Control-Allow-Headers: Accept,Authorization,Content-Type,Last-Event-ID,Liferay-AI-Hub-Cell-On-Behalf-Of
-   Access-Control-Allow-Methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
-   Access-Control-Allow-Origin: https://forums.example.com
-   ```
-
 1. **Import the fragment.** Download [forums-ai-fragments.zip](downloads/forums-ai-fragments.zip). In the forum site, go to *Design* → *Fragments*, open the actions menu (⋮) next to *Fragment Sets*, and choose **Import**. Select the zip and click **Import**. The **Forums AI** fragment set appears, with the **AI Hub Chat** fragment.
 
     ![The fragment Import page with forums-ai-fragments.zip selected.](import-fragments.png){: .screenshot }
@@ -178,7 +163,7 @@ Check that:
 **Known limitations:**
 
 - **Links in answers point to the post's API address,** not the topic's page: AI Hub's search results don't include the page's address yet. Members can find the discussion by its title.
-- **When you test locally, give AI Hub and the forum's Liferay different host names,** such as `localhost` and `127.0.0.1`, not just different ports. Browsers keep one set of cookies per host name, so AI Hub's session cookie would replace the forum's, and the chat would get *403* when it asks the forum for the member's sign-in.
+- **If the chat doesn't load or answer,** check that the forum's address is in AI Hub's **Environment URLs** (Step 3) exactly as members open it, including `https://`.
 
 **Where next:**
 
