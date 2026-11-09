@@ -109,9 +109,17 @@ This recipe was tested on 2026.Q1.4 with pre-release builds of these AI Hub back
 The agent turns one discussion into a short summary. It has a single LLM step and doesn't search anything: the workflow sends it the discussion.
 
 1. **Download** [forums-discussion-summary.workflow.xml](downloads/forums-discussion-summary.workflow.xml).
-1. **In AI Hub, add an agent:**
+1. **In AI Hub, open the agent builder and click New Agent.**
+1. **Add the workflow first,** before you fill in the form: the form may not keep what you typed while you edit the workflow.
+    1. Click **Edit Workflow**, then **Source View**.
+    1. Replace the whole source with the content of the downloaded file, and click **Update**.
+    1. Wait for *Workflow updated successfully.* AI Hub names the workflow after the agent, so the name in the file doesn't matter.
+    1. Click **Cancel** to go back to the agent.
+
+    The **Diagram View** may show only Start and End. The agent's LLM step is still there: **Source View** shows it, and the agent runs it.
+1. **Fill in the agent:**
     - **Title:** `Forums Discussion Summary`
-    - **External Reference Code:** `FORUMS_DISCUSSION_SUMMARY`, or the code AI Hub suggests. Codes are unique across the whole AI Hub, so use AI Hub's code if this one is taken, and put it in the workflow in Step 6.
+    - **External Reference Code:** keep the code AI Hub filled in, and copy it: you put it in the workflow in Step 6. Codes are unique across the whole AI Hub, and AI Hub doesn't warn you when a code you type is taken: it just doesn't save the agent.
     - **Description:**
 
       ```text
@@ -122,7 +130,7 @@ The agent turns one discussion into a short summary. It has a single LLM step an
     - **Output Variable:** `summary`
 
     ![Creating the Forums Discussion Summary agent in AI Hub: its title, external reference code, description, and variables.](agent-summary.png){: .screenshot }
-1. Click **Edit Workflow**, open the workflow's code view, replace its content with the downloaded workflow file, and click **Update**. Then **Save** the agent.
+1. **Turn on Enable Agent,** and click **Publish**. The agent appears in the agent builder's list. Without **Enable Agent**, it's published inactive and doesn't run.
 
 The agent's instructions ask for plain text of at most 120 words, in the discussion's language: what was asked, the answer or what was agreed (the accepted answer first, and who gave it), and what is still open. They treat posts as data written by members, never as instructions, and don't assume anyone's gender. To change the summary's style or length, edit the instructions in the agent's LLM step.
 
@@ -188,7 +196,7 @@ The service runs as its own container next to Liferay. Every few minutes, it loo
 
 The **Forums AI Summary** workflow writes each summary in two steps: its **AI Hub agent** step runs the Forums Discussion Summary agent through the connection of Step 2, then its last step hands the summary to the service's workflow action.
 
-1. **Download** [forums-ai-summary.workflow.xml](downloads/forums-ai-summary.workflow.xml). If AI Hub gave the agent another external reference code in Step 3, replace `FORUMS_DISCUSSION_SUMMARY` in the file with it.
+1. **Download** [forums-ai-summary.workflow.xml](downloads/forums-ai-summary.workflow.xml), and replace `FORUMS_DISCUSSION_SUMMARY` in it with the agent's external reference code from Step 3. It appears once, in `agent-definition-external-reference-code`.
 1. **Deploy it** through Liferay's workflow API, with an administrator's email address and password, for example with `jq` and `curl`:
 
     ```bash
@@ -236,6 +244,8 @@ Check that:
 - **If summaries don't appear,** check `docker logs forums-ai-summary`: the service logs each workflow it starts and each summary it saves, hides or removes. If it started a workflow but saved nothing, the agent didn't answer: Liferay's log says *Unable to complete AI hub agent node "summarize"* with the reason. Check the AI Hub connection (Step 2) and the agent's code in the workflow (Step 6). The service deletes a stuck workflow and tries again after `FORUMS_AI_SUMMARY_RETRY_MINUTES`.
 
 **To remove the summaries:** take the AI Summary fragment off the **Forum Thread** template and publish it, stop and remove the `forums-ai-summary` container, remove both zips from `osgi/client-extensions`, and unpublish and delete the **Forums AI Summary** workflow in *Workflow* → *Process Builder*. The forum works as before. To delete the summaries too, delete the **Forums AI Summary** object and its **Forums AI Summary Status** picklist.
+
+If Liferay won't delete the workflow because it has unfinished instances, an agent step never finished. Before you remove the container, find their IDs in its log (`docker logs forums-ai-summary | grep "started"` lists *workflow &lt;ID&gt; started* for each), and delete each one that never saved a summary with `DELETE /o/headless-admin-workflow/v1.0/workflow-instances/<ID>`, from the forum's API Explorer or with `curl`.
 
 **Where next:**
 

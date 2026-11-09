@@ -119,9 +119,17 @@ The agent searches the forum's discussions with AI Hub's **Liferay Search** step
 
     Each returns a class name such as `com.liferay.object.model.ObjectDefinition#J6B8`. You can also run the same request, **getObjectDefinitionByExternalReferenceCode**, from the forum's API Explorer (`/o/api`, *object-admin*).
 1. **Download** [forums-discussion-finder.workflow.xml](downloads/forums-discussion-finder.workflow.xml). Replace `C2M0_THREAD_CLASS_NAME` and `C2M0_MESSAGE_CLASS_NAME` with the two class names.
-1. **In AI Hub, add an agent:**
+1. **In AI Hub, open the agent builder and click New Agent.**
+1. **Add the workflow first,** before you fill in the form: the form may not keep what you typed while you edit the workflow.
+    1. Click **Edit Workflow**, then **Source View**.
+    1. Replace the whole source with your edited workflow file, and click **Update**.
+    1. Wait for *Workflow updated successfully.* AI Hub names the workflow after the agent, so the name in the file doesn't matter.
+    1. Click **Cancel** to go back to the agent.
+
+    The **Diagram View** may show only Start and End. The agent's LLM step is still there: **Source View** shows it, and the agent runs it.
+1. **Fill in the agent:**
     - **Title:** `Forums Discussion Finder`
-    - **External Reference Code:** `FORUMS_DISCUSSION_FINDER`, or the code AI Hub suggests. Codes are unique across the whole AI Hub, so use AI Hub's code if this one is taken.
+    - **External Reference Code:** keep the code AI Hub filled in. Codes are unique across the whole AI Hub, and AI Hub doesn't warn you when a code you type is taken: it just doesn't save the agent.
     - **Description:** the chatbot picks an agent by its description, so use this one, or one that says the same:
 
       ```text
@@ -132,7 +140,7 @@ The agent searches the forum's discussions with AI Hub's **Liferay Search** step
     - **Output Variable:** `response`
 
     ![Creating the Forums Discussion Finder agent in AI Hub: its title, external reference code, description, and variables.](agent-finder.png){: .screenshot }
-1. Click **Edit Workflow**, open the workflow's code view, replace its content with your edited workflow file, and click **Update**. Then **Save** the agent.
+1. **Turn on Enable Agent,** and click **Publish**. The agent appears in the agent builder's list. Without **Enable Agent**, it's published inactive and doesn't run.
 
 The workflow has one LLM step. It names each discussion by its exact title, so people can find it with the forum's search. Its instructions treat forum posts as data written by members, never as instructions, and only list discussions that appear in the search results.
 
