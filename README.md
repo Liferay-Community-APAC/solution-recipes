@@ -11,7 +11,8 @@ site's header, footer, styles and search.
 ## Add a recipe
 
 1. Copy `RECIPE_TEMPLATE.md` to `docs/<recipe-name>/index.md`, for example `docs/community-qa-portal/index.md`.
-2. Fill in the front matter:
+2. Fill in the front matter. Reuse existing tags where they fit (such as `AI Hub`, `Liferay Forums`, `Fragments`,
+   `Client extensions`), so the filter on the home page groups recipes well:
 
     ```yaml
     ---
@@ -20,6 +21,7 @@ site's header, footer, styles and search.
     recipe: true                     # lists it on the home page
     summary: One sentence for its card on the home page.
     description: One sentence for search results.
+    tags: [AI Hub, Liferay Forums, Fragments]   # shown on the recipe and its card; the home page filters by them
     ---
     ```
 

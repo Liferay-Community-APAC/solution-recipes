@@ -3,6 +3,7 @@ title: My Recipe
 nav_order: 10
 recipe: true
 summary: One sentence for the recipe card on the home page.
+tags: [Liferay Forums, Fragments]   # shown on the recipe and its card, and used by the filter on the home page
 description: One sentence for search results.
 ---
 

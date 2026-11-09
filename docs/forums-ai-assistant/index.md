@@ -4,6 +4,7 @@ nav_order: 10
 recipe: true
 summary: Add an AI chat to Liferay Forums that tells members where to find the discussions they're looking for, searching only what each member can see.
 description: Add a Liferay AI Hub chat assistant to Liferay Forums that finds forum discussions for signed-in members.
+tags: [AI Hub, Liferay Forums, AI chat, Search, Fragments, Master pages]   # shown on the recipe and its card, and used by the filter on the home page
 product:                 # the Liferay product the recipe showcases: shown with its logo on the recipe and its card
   name: Liferay AI Hub
   logo: /assets/products/ai-hub.png

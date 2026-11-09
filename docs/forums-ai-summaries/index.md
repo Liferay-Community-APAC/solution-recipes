@@ -4,6 +4,7 @@ nav_order: 20
 recipe: true
 summary: Show an AI summary at the top of busy Liferay Forums discussions, written by a Liferay AI Hub agent and kept up to date as replies arrive.
 description: Add AI summaries of Liferay Forums discussions, written by a Liferay AI Hub agent and shown at the top of each topic.
+tags: [AI Hub, Liferay Forums, AI summaries, Objects, Client extensions, Fragments, Display page templates]   # shown on the recipe and its card, and used by the filter on the home page
 product:                 # the Liferay product the recipe showcases: shown with its logo on the recipe and its card
   name: Liferay AI Hub
   logo: /assets/products/ai-hub.png

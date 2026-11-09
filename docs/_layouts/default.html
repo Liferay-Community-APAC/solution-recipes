@@ -63,6 +63,22 @@
     .card.doc .card-logos .card-logo { margin-bottom: 0; }
     .card.doc .card-app-logo { width: 28px; height: 28px; }
     .with-logo { display: inline-flex; align-items: center; gap: 8px; }
+    /* Recipe tags, and the filter on the home page. */
+    .recipe-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .page-tags { margin: 0 0 14px; }
+    .rtag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; line-height: 1.6;
+            background: var(--bg-alt); color: var(--muted); border: 1px solid var(--border); text-decoration: none; }
+    a.rtag:hover { color: var(--blue); border-color: var(--blue); }
+    .recipe-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+    .recipe-filter button { font: inherit; font-size: 14px; font-weight: 600; padding: 5px 12px; border-radius: 999px; cursor: pointer;
+            border: 1px solid var(--border); background: var(--surface, #fff); color: var(--text); }
+    .recipe-filter button .n { color: var(--muted); font-weight: 400; margin-left: 2px; }
+    .recipe-filter button[aria-pressed="true"] { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .recipe-filter button[aria-pressed="true"] .n { color: rgba(255,255,255,.8); }
+    .recipe-filter button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .recipe-count { margin: 0 0 12px; font-size: 14px; color: var(--muted); }
+    .recipe-count:empty { display: none; }
+    .doc-cards .card.doc[hidden] { display: none; }
     .prose img.inline-logo, img.inline-logo { display: inline-block; width: 24px; height: 24px; margin: 0; flex: none; border: 0; box-shadow: none; }
     @media (max-width: 560px) { .product-spotlight { flex-direction: column; align-items: flex-start; } }
   </style>
@@ -102,6 +118,9 @@
       {%- if is_home %}{{ site.app_name }}{% else %}<a href="{{ '/' | relative_url }}">{{ site.app_name }}</a>{% endif -%}
       {%- if page.parent %}{% assign par = tops | where: "title", page.parent | first %}{% if par %}<span>/</span><a href="{{ par.url | relative_url }}">{{ par.title }}</a>{% endif %}{% endif %}
     </p>
+    {%- if page.recipe and page.tags %}
+    <p class="recipe-tags page-tags">{% for t in page.tags %}<a class="rtag" href="{{ '/' | relative_url }}?tag={{ t | url_encode }}#recipes">{{ t }}</a>{% endfor %}</p>
+    {%- endif %}
     <article class="prose"{% unless page.search_exclude %} data-pagefind-body{% endunless %}>
       {{ content }}
     </article>
