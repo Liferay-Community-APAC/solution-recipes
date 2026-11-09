@@ -26,7 +26,7 @@ Your SharePoint Server 2016 discussion boards, moved into a [Liferay Forums](/li
 | Ingredient | Type | Guide |
 | --- | --- | --- |
 | Liferay Forums 1.0.0 | Marketplace App | [App page](/marketplace-apps/#liferay-forums), [Liferay Forums guide](/liferay-forums/), [download](https://github.com/Liferay-Community-APAC/liferay-forums/releases/latest) |
-| Liferay Migration Studio (coming soon) | Tool | [Liferay Migration Studio preview](https://liferay-community-apac.github.io/liferay-migration-studio/preview/) |
+| Liferay Migration Studio (coming soon) | Marketplace App | [App page](/marketplace-apps/#liferay-migration-studio), [Liferay Migration Studio guide](/liferay-migration-studio/) |
 | Batch import that keeps each record's creator | DXP feature | [Batch Engine API Basics: Importing Data](https://learn.liferay.com/w/dxp/integration/headless-apis/using-liferay-as-a-headless-platform/consuming-apis/batch-engine-api-basics-importing-data) |
 
 **Before you start, you need:**
