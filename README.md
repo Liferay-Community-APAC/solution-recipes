@@ -23,6 +23,22 @@ site's header, footer, styles and search.
     ---
     ```
 
+    Optionally, name the Liferay product the recipe showcases (`product`, shown with its logo in a **Powered by**
+    panel and on the recipe's card) and the Marketplace Apps it builds on (`apps`, whose logos show on the card at
+    half the product logo's size):
+
+    ```yaml
+    product:
+      name: Liferay AI Hub
+      logo: /assets/products/ai-hub.png
+      url: https://www.liferay.com/capabilities/ai-hub
+      blurb: One sentence about the product.
+    apps:
+      - name: Liferay Forums
+        logo: /assets/apps/liferay-forums.png   # a 64px PNG
+        url: /liferay-forums/
+    ```
+
 3. Write the four sections: **What You'll Build**, **Ingredients**, **Steps** and **Result**. Link each ingredient
    to its own guide instead of repeating it. Put screenshots next to the page, in `docs/<recipe-name>/`.
 4. Open a pull request. The home page lists the recipe automatically.

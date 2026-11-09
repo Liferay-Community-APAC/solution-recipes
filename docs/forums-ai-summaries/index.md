@@ -9,6 +9,10 @@ product:                 # the Liferay product the recipe showcases: shown with 
   logo: /assets/products/ai-hub.png
   url: https://www.liferay.com/capabilities/ai-hub
   blurb: Liferay AI Hub lets you deploy AI agents that learn, make decisions, and improve your digital experiences, without the technical barriers.
+apps:                    # Marketplace Apps the recipe builds on: their logos show at half the product logo's size
+  - name: Liferay Forums
+    logo: /assets/apps/liferay-forums.png
+    url: /liferay-forums/
 ---
 
 # AI Discussion Summaries with AI Hub
@@ -42,7 +46,7 @@ For a chat that finds discussions for members, see the [Forums Assistant with AI
 
 | Ingredient | Type | Guide |
 | --- | --- | --- |
-| Liferay Forums 1.0.0 | Marketplace App | [Liferay Forums guide](/liferay-forums/) |
+| <span class="with-logo"><img class="inline-logo" src="{{ '/assets/apps/liferay-forums.png' | relative_url }}" alt="" width="24" height="24">Liferay Forums 1.0.0</span> | Marketplace App | [Liferay Forums guide](/liferay-forums/) |
 | Liferay AI Hub: an agent | Liferay product (generally available from DXP 2026.Q3; beta on 2026.Q1) | [AI Hub](https://learn.liferay.com/w/ai-hub/index), [Agent Workflows](https://learn.liferay.com/w/ai-hub/agent-workflows) |
 | The summary object and service | Client extensions | [Client Extensions](https://learn.liferay.com/w/dxp/development/client-extensions) |
 | Fragments and display page templates | DXP feature | [Managing Fragments](https://learn.liferay.com/w/dxp/site-building/creating-pages/page-fragments-and-widgets/using-fragments/managing-fragments), [Display Page Templates](https://learn.liferay.com/w/dxp/sites/displaying-content/using-display-page-templates) |

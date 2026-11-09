@@ -58,6 +58,12 @@
     .product-spotlight img { display: block; width: 96px; height: 96px; }
     .product-spotlight p { margin: 0; }
     .card.doc .card-logo { width: 56px; height: 56px; margin-bottom: 4px; }
+    /* Marketplace App logos: half the size of a product logo, on recipe cards and in ingredients tables. */
+    .card.doc .card-logos { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 4px; }
+    .card.doc .card-logos .card-logo { margin-bottom: 0; }
+    .card.doc .card-app-logo { width: 28px; height: 28px; }
+    .with-logo { display: inline-flex; align-items: center; gap: 8px; }
+    .prose img.inline-logo, img.inline-logo { display: inline-block; width: 24px; height: 24px; margin: 0; flex: none; border: 0; box-shadow: none; }
     @media (max-width: 560px) { .product-spotlight { flex-direction: column; align-items: flex-start; } }
   </style>
 </head>
