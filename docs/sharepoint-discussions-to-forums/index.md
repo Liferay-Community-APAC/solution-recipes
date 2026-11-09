@@ -1,6 +1,6 @@
 ---
 title: SharePoint Discussions to Liferay Forums
-nav_order: 20
+nav_order: 30
 recipe: true
 summary: Move SharePoint Server 2016 discussion boards into Liferay Forums, keeping authors, nested replies, best answers, attachments and likes.
 description: Migrate SharePoint Server 2016 discussion boards to Liferay Forums with Liferay Migration Studio, keeping authors, replies, best answers, attachments and likes.
