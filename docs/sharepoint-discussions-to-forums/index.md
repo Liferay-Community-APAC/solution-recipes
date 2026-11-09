@@ -107,7 +107,7 @@ Click **Validate**. Migration Studio checks:
 - **A sample of migrated posts,** read back from Liferay and compared field by field with SharePoint, including the author.
 - **Records that point to something not migrated:** posts whose author wasn't migrated, such as the posts and replies by *Former Employee*, a SharePoint user without an email address. The migration account posted them instead.
 
-![Validation: everything loaded and matched the spot check. Threads, posts and replies are marked "check" because 66 of them are by Former Employee, who wasn't migrated.](validation.png){: .screenshot }
+![Validation: everything loaded and matched the spot check. Threads, posts and replies are marked "check" because 15 discussions and 36 replies are by Former Employee, who wasn't migrated.](validation.png){: .screenshot }
 
 ## Result
 
