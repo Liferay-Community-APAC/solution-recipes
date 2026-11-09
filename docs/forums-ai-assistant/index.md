@@ -24,9 +24,9 @@ Liferay AI Hub is in beta: [request access](https://learn.liferay.com/w/ai-hub/i
 
 ## What You'll Build
 
-A **Forums Assistant** chat on your [Liferay Forums](/liferay-forums/) site. Members ask *"Where can I find the discussion about ...?"* and the assistant answers with the matching discussions: what each one covers, and whether it has an accepted answer. It searches the forum as the signed-in member, so it only finds discussions that member can already see.
+A **Forums Assistant** chat on your [Liferay Forums](/liferay-forums/) site. Staff ask everyday questions, such as *"How do I claim expenses for a client dinner?"* or *"Has anyone had the VPN dropping when working from home?"*, and the assistant answers with the matching discussions: their titles, what each one covers, and whether it has an accepted answer. It searches the forum as the signed-in member, so it only finds discussions that member can already see.
 
-![The Forums Assistant on a forum site, answering where to find the discussion about reindexing a large site without downtime.](chat-answer.png){: .screenshot }
+![The Forums Assistant on a company forum, answering how to claim expenses for a client dinner with the matching discussion.](chat-answer.png){: .screenshot }
 
 The screenshots show a forum branded as a fictitious company, *Lumora Community*, as the Liferay Forums guide describes in [Matching Your Company's Look](/liferay-forums/administering/customizing.html#matching-your-companys-look).
 
@@ -109,7 +109,7 @@ The agent searches the forum's discussions with AI Hub's **Liferay Search** step
     - **Description:** the chatbot picks an agent by its description, so use this one, or one that says the same:
 
       ```text
-      Finds forum discussions about a topic and says where they are: titles, what each covers, whether it has an accepted answer, and links. Use it when someone asks where to find a discussion, or whether something was already asked in the forum.
+      Finds forum discussions about a topic and says where they are: their titles, what each covers, and whether it has an accepted answer. Use it when someone asks where to find a discussion, or whether something was already asked in the forum.
       ```
 
     - **Input Variables:** `request`
@@ -118,7 +118,7 @@ The agent searches the forum's discussions with AI Hub's **Liferay Search** step
     ![Creating the Forums Discussion Finder agent in AI Hub: its title, external reference code, description, and variables.](agent-finder.png){: .screenshot }
 1. Click **Edit Workflow**, open the workflow's code view, replace its content with your edited workflow file, and click **Update**. Then **Save** the agent.
 
-The workflow has one LLM step. Its instructions treat forum posts as data written by members, never as instructions, and only list discussions that appear in the search results.
+The workflow has one LLM step. It names each discussion by its exact title, so people can find it with the forum's search. Its instructions treat forum posts as data written by members, never as instructions, and only list discussions that appear in the search results.
 
 ### Step 5: Create the Forums Assistant Chatbot
 
@@ -126,11 +126,11 @@ In AI Hub, add a chatbot:
 
 - **Title:** `Forums Assistant`
 - **External Reference Code:** `FORUMS_ASSISTANT`, or the code AI Hub suggests
-- **Description:** `Helps people find discussions in the community forum.`
+- **Description:** `Helps staff find discussions in the community forum.`
 - **Assigned Agents:** Forums Discussion Finder
 - **Placeholder Message:** `Where is the discussion about...`
 - **Intro Message:** `Hi! Tell me what you are looking for and I will find the forum discussions about it.`
-- **Suggested questions:** a few questions your members ask, such as *Where can I find the discussion about reindexing without downtime?*
+- **Suggested questions:** a few questions your staff ask, such as *How do I claim expenses for a client dinner?* or *Where are the latest logo files and slide templates?*
 - **Allow guest access:** off. The chat searches as the signed-in member, so guests have nothing to search.
 
 ![The Forums Assistant chatbot in AI Hub: its title, external reference code, and description.](chatbot.png){: .screenshot }
@@ -160,7 +160,7 @@ Sign in to the forum as a member. The chat button shows at the bottom right of e
 
 ![A forum page with the Forums Assistant's chat button at the bottom right.](chat-button.png){: .screenshot }
 
-Open it and ask where to find a discussion that you know exists, such as *Where can I find the discussion about reindexing a large site without downtime?* The assistant names the matching discussion, says what it covers and whether it has an accepted answer, and warns about anything suspicious in it, as in the screenshot at the top of this page.
+Open it and ask about a discussion that you know exists, such as *How do I claim expenses for a client dinner?* The assistant names the matching discussion, says what it covers and whether it has an accepted answer, as in the screenshot at the top of this page. If a discussion has a suspicious post, such as one asking the AI to do something, it says so rather than repeating it.
 
 Check that:
 
@@ -169,7 +169,7 @@ Check that:
 
 **Known limitations:**
 
-- **Links in answers point to the post's API address,** not the topic's page: AI Hub's search results don't include the page's address yet. Members can find the discussion by its title.
+- **Answers name discussions by title, without links:** AI Hub's search results don't include the discussions' page addresses yet. Members find a discussion with the forum's search.
 - **If the chat doesn't load or answer,** check that the forum's address is in AI Hub's **Environment URLs** (Step 3) exactly as members open it, including `https://`.
 
 **Where next:**
