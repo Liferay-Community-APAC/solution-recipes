@@ -58,7 +58,7 @@ Both are available under the same licenses as Liferay Forums: [LGPL-2.1-or-later
 
 **Before you start, you need:**
 
-- Liferay DXP 2026.Q3 or later, or Liferay DXP 2026.Q1 LTS with AI Hub support (Step 2), with Liferay Forums 1.0.0 installed and its forum site created. This recipe was tested on 2026.Q1.4 with PostgreSQL.
+- Liferay DXP 2026.Q3 or later, or Liferay DXP 2026.Q1 LTS with AI Hub support (Step 2), with Liferay Forums 1.0.0 installed, with its [required Liferay fixes](/liferay-forums/installing/#required-liferay-fixes), and its forum site created. This recipe was tested on 2026.Q1.4 with PostgreSQL.
 - An AI Hub account, with the **Client ID** and **Client Secret** Liferay provided for it.
 - Administrator access to the forum's Liferay.
 - The forum's Liferay reachable from the internet, so AI Hub can reach it. For testing on your own computer, see the note on tunnels in [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp).

@@ -66,7 +66,7 @@ All are available under the same licenses as Liferay Forums: [LGPL-2.1-or-later]
 
 **Before you start, you need:**
 
-- Liferay DXP 2026.Q1 LTS on Liferay Self-Hosted with Docker, with Liferay Forums 1.0.0 installed and its forum site created. This recipe was tested on 2026.Q1.4 with PostgreSQL.
+- Liferay DXP 2026.Q1 LTS on Liferay Self-Hosted with Docker, with Liferay Forums 1.0.0 installed, with its [required Liferay fixes](/liferay-forums/installing/#required-liferay-fixes), and its forum site created. This recipe was tested on 2026.Q1.4 with PostgreSQL.
 - An AI Hub account, with the **Client ID** and **Client Secret** Liferay provided for it. The summary service signs in to AI Hub with them to run the agent, so they must be allowed to run agents: the scope `Liferay.AI.Hub.REST.everything`. If you're not sure that yours are, ask Liferay Support.
 - Administrator access to the forum's Liferay, and access to the server that runs its Docker containers.
 
