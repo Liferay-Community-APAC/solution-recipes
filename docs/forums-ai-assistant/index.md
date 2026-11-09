@@ -10,7 +10,7 @@ description: Add a Liferay AI Hub chat assistant to Liferay Forums that finds fo
 {: .no_toc }
 
 {: .important }
-Liferay AI Hub is in beta: [request access](https://learn.liferay.com/w/ai-hub/index) before you start. On Liferay DXP 2026.Q1, check with Liferay Support that your update can connect to AI Hub (Step 2).
+Liferay AI Hub is in beta: [request access](https://learn.liferay.com/w/ai-hub/index) before you start. On Liferay DXP 2026.Q1, you also need AI Hub support for your update, which you request from Liferay Support (Step 2).
 
 1. TOC
 {:toc}
@@ -63,7 +63,7 @@ Once the site exists, remove the site initializer zip as the guide says. If it s
 
 The chat runs on the forum's pages and searches the forum as the signed-in member, so the forum's Liferay must be connected to AI Hub. [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp) describes the connection.
 
-1. **On Liferay DXP 2026.Q1, ask Liferay Support** whether your update supports connecting to AI Hub, and how to get that support if it doesn't. Later quarterly releases may include it already.
+1. **On Liferay DXP 2026.Q1, request AI Hub support from Liferay Support.** 2026.Q1.4 with hotfix 84, the update this recipe was tested on, doesn't include everything the connection needs. Open a Support ticket asking for AI Hub support for your 2026.Q1 update (for example, 2026.Q1.4), and give your current update and hotfix. Liferay Support provides it as a hotfix or as the update that includes it. Newer quarterly releases may include it already: check with Liferay Support.
 1. **Turn on the feature flag:** *Control Panel* → *Instance Settings* → *Feature Flags* → *Release*, then enable **AI Hub (LPD-62272)**. On Liferay Self-Hosted, you can set it in `portal-ext.properties` instead:
 
    ```properties
