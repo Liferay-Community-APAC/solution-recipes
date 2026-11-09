@@ -31,7 +31,7 @@ A **Forums Assistant** chat on your [Liferay Forums](/liferay-forums/) site. Sta
 The screenshots show a forum branded as a fictitious company, *Lumora Community*, as the Liferay Forums guide describes in [Matching Your Company's Look](/liferay-forums/administering/customizing.html#matching-your-companys-look).
 
 {: .note }
-AI summaries at the top of each discussion come in a later version of this recipe.
+For AI summaries at the top of each discussion, see the [AI Discussion Summaries with AI Hub](../forums-ai-summaries/) recipe. The two recipes work on their own or together, and share the same fragment set.
 
 ## Ingredients
 
@@ -46,7 +46,7 @@ AI summaries at the top of each discussion come in a later version of this recip
 
 | File | What it is |
 | --- | --- |
-| [forums-ai-fragments.zip](downloads/forums-ai-fragments.zip) | The **Forums AI** fragment set, with the **AI Hub Chat** fragment that puts AI Hub's chat on the forum's pages |
+| [forums-ai-fragments.zip](downloads/forums-ai-fragments.zip) | The **Forums AI** fragment set: **AI Hub Chat** puts AI Hub's chat on the forum's pages, and **AI Summary** is for the [AI Discussion Summaries](../forums-ai-summaries/) |
 | [forums-discussion-finder.workflow.xml](downloads/forums-discussion-finder.workflow.xml) | The workflow of the **Forums Discussion Finder** agent |
 
 Both are available under the same licenses as Liferay Forums: [LGPL-2.1-or-later](downloads/LICENSES/LGPL-2.1-or-later.txt) or the [Liferay DXP EULA](downloads/LICENSES/LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06.txt).
@@ -141,7 +141,7 @@ Save it. Its page then shows the **Chatbot Code**. You need two values from it i
 
 ### Step 6: Add the Chat to the Forum Site
 
-1. **Import the fragment.** Download [forums-ai-fragments.zip](downloads/forums-ai-fragments.zip). In the forum site, go to *Design* → *Fragments*, open the actions menu (⋮) next to *Fragment Sets*, and choose **Import**. Select the zip and click **Import**. The **Forums AI** fragment set appears, with the **AI Hub Chat** fragment.
+1. **Import the fragment.** Download [forums-ai-fragments.zip](downloads/forums-ai-fragments.zip). In the forum site, go to *Design* → *Fragments*, open the actions menu (⋮) next to *Fragment Sets*, and choose **Import**. Select the zip and click **Import**. The **Forums AI** fragment set appears, with the **AI Hub Chat** and **AI Summary** fragments. If you've already imported it for the [AI Discussion Summaries](../forums-ai-summaries/), you have it already.
 
     ![The fragment Import page with forums-ai-fragments.zip selected.](import-fragments.png){: .screenshot }
 
@@ -177,4 +177,4 @@ Check that:
 **Where next:**
 
 - [Matching Your Company's Look](/liferay-forums/administering/customizing.html#matching-your-companys-look) in the Liferay Forums guide, to brand the forum like the screenshots.
-- AI summaries of each discussion, in a later version of this recipe.
+- [AI Discussion Summaries with AI Hub](../forums-ai-summaries/), for a summary at the top of each busy discussion.
