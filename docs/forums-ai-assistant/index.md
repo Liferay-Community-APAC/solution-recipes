@@ -58,7 +58,7 @@ Both are available under the same licenses as Liferay Forums: [LGPL-2.1-or-later
 
 **Before you start, you need:**
 
-- Liferay DXP 2026.Q3 or later, or Liferay DXP 2026.Q1 LTS with AI Hub support (Step 2), with Liferay Forums 1.0.0 installed and its forum site created. This recipe was tested on 2026.Q1.4 with hotfix 84 and PostgreSQL.
+- Liferay DXP 2026.Q3 or later, or Liferay DXP 2026.Q1 LTS with AI Hub support (Step 2), with Liferay Forums 1.0.0 installed and its forum site created. This recipe was tested on 2026.Q1.4 with PostgreSQL.
 - An AI Hub account, with the **Client ID** and **Client Secret** Liferay provided for it.
 - Administrator access to the forum's Liferay.
 - The forum's Liferay reachable from the internet, so AI Hub can reach it. For testing on your own computer, see the note on tunnels in [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp).
@@ -75,7 +75,7 @@ Once the site exists, remove the site initializer zip as the guide says. If it s
 
 The chat runs on the forum's pages and searches the forum as the signed-in member, so the forum's Liferay must be connected to AI Hub. [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp) describes the connection.
 
-1. **On Liferay DXP 2026.Q1, request AI Hub support from Liferay Support.** 2026.Q1.4 with hotfix 84, the update this recipe was tested on, doesn't include everything the connection needs. Open a Support ticket asking for **AI Hub support (LPD-93555 and LPD-107054)** for your 2026.Q1 update (for example, 2026.Q1.4), and give your current update and hotfix. Liferay Support provides it as a hotfix or as the update that includes it. AI Hub is in beta on 2026.Q1 and backports are in progress, so a later 2026.Q1 update may include them: check with Liferay Support. On 2026.Q3 and later, where AI Hub is generally available, skip this step.
+1. **On Liferay DXP 2026.Q1, request AI Hub support from Liferay Support.** 2026.Q1 updates, including 2026.Q1.4 that this recipe was tested on, don't include everything the connection needs. Open a Support ticket asking for **AI Hub support (LPD-93555 and LPD-107054)** for your 2026.Q1 update (for example, 2026.Q1.4), and give your current update and hotfix. Liferay Support provides it as a hotfix or as the update that includes it. AI Hub is in beta on 2026.Q1 and backports are in progress, so a later 2026.Q1 update may include them: check with Liferay Support. On 2026.Q3 and later, where AI Hub is generally available, skip this step.
 1. **On 2026.Q1, turn on the feature flag:** *Control Panel* → *Instance Settings* → *Feature Flags* → *Release*, then enable **AI Hub (LPD-62272)**. On Liferay Self-Hosted, you can set it in `portal-ext.properties` instead:
 
    ```properties
