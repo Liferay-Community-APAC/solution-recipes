@@ -17,9 +17,18 @@ Recipes are unofficial guides, like the [Marketplace Apps and tutorials](https:/
 {%- assign recipes = site.pages | where: "recipe", true | sort: "nav_order", "last" %}
 <div class="doc-cards">
 {%- for r in recipes %}
-  <a class="card doc" href="{{ r.url | relative_url }}"><strong>{{ r.title }}{% if r.status == "placeholder" %} (placeholder){% endif %}</strong><span>{{ r.summary }}</span></a>
+  <a class="card doc" href="{{ r.url | relative_url }}">{% if r.product %}<img class="card-logo" src="{{ r.product.logo | relative_url }}" alt="" width="56" height="56">{% endif %}<strong>{{ r.title }}{% if r.status == "placeholder" %} (placeholder){% endif %}</strong><span>{{ r.summary }}</span></a>
 {%- endfor %}
 </div>
+
+{%- assign shown = "" %}
+{%- for r in recipes %}
+{%- if r.product and shown contains r.product.name %}{% continue %}{% endif %}
+{%- if r.product %}
+{%- assign shown = shown | append: "|" | append: r.product.name %}
+{% include product-spotlight.html product=r.product %}
+{%- endif %}
+{%- endfor %}
 
 ## How a Recipe Is Organized
 

@@ -1,0 +1,11 @@
+{%- comment -%}
+  A "Built with" panel for a Liferay product a recipe uses: its logo, a sentence about it, and a link to its
+  official page. Pass product= a recipe's `product` front matter, or leave it out to use the page's own.
+{%- endcomment -%}
+{%- assign p = include.product | default: page.product -%}
+{%- if p -%}
+<div class="product-spotlight">
+  <a href="{{ p.url }}"><img src="{{ p.logo | relative_url }}" alt="{{ p.name }}" width="96" height="96"></a>
+  <p><strong>Built with {{ p.name }}.</strong> {{ p.blurb }} <a href="{{ p.url }}">Learn about {{ p.name }}</a></p>
+</div>
+{%- endif -%}

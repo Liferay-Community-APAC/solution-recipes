@@ -52,6 +52,13 @@
     .copy-code { position: absolute; top: 8px; right: 8px; padding: 3px 10px; font: 600 12px/1.6 var(--font, inherit); color: var(--muted); background: var(--surface, #fff); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
     .copy-code:hover, .copy-code:focus-visible { color: var(--text); border-color: var(--muted); }
     .copy-code.copied { color: var(--blue); border-color: var(--blue); }
+    /* "Built with" panels and card logos for the Liferay products recipes use (_includes/product-spotlight.html). */
+    .product-spotlight { display: flex; align-items: center; gap: 20px; margin: 20px 0; padding: 16px 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--code-bg, transparent); }
+    .product-spotlight > a { flex: none; line-height: 0; }
+    .product-spotlight img { display: block; width: 96px; height: 96px; }
+    .product-spotlight p { margin: 0; }
+    .card.doc .card-logo { width: 56px; height: 56px; margin-bottom: 4px; }
+    @media (max-width: 560px) { .product-spotlight { flex-direction: column; align-items: flex-start; } }
   </style>
 </head>
 <body data-section="{{ site.section_id }}">
