@@ -4,11 +4,16 @@ nav_order: 10
 recipe: true
 summary: Add an AI chat to Liferay Forums that tells members where to find the discussions they're looking for, searching only what each member can see.
 description: Add a Liferay AI Hub chat assistant to Liferay Forums that finds forum discussions for signed-in members.
+tags: [AI Hub, Liferay Forums, AI chat, Search, Fragments, Master pages]   # shown on the recipe and its card, and used by the filter on the home page
 product:                 # the Liferay product the recipe showcases: shown with its logo on the recipe and its card
   name: Liferay AI Hub
   logo: /assets/products/ai-hub.png
   url: https://www.liferay.com/capabilities/ai-hub
   blurb: Liferay AI Hub lets you deploy AI agents that learn, make decisions, and improve your digital experiences, without the technical barriers.
+apps:                    # Marketplace Apps the recipe builds on: their logos show at half the product logo's size
+  - name: Liferay Forums
+    logo: /assets/apps/liferay-forums.png
+    url: /liferay-forums/
 ---
 
 # Forums Assistant with AI Hub
@@ -37,7 +42,7 @@ For AI summaries at the top of each discussion, see the [AI Discussion Summaries
 
 | Ingredient | Type | Guide |
 | --- | --- | --- |
-| Liferay Forums 1.0.0 | Marketplace App | [Liferay Forums guide](/liferay-forums/) |
+| <span class="with-logo"><img class="inline-logo" src="{{ '/assets/apps/liferay-forums.png' | relative_url }}" alt="" width="24" height="24">Liferay Forums 1.0.0</span> | Marketplace App | [Liferay Forums guide](/liferay-forums/) |
 | Liferay AI Hub: an agent and a chatbot | Liferay product (generally available from DXP 2026.Q3; beta on 2026.Q1) | [AI Hub](https://learn.liferay.com/w/ai-hub/index), [Agent Workflows](https://learn.liferay.com/w/ai-hub/agent-workflows), [Chatbots](https://learn.liferay.com/w/ai-hub/chatbots) |
 | Liferay DXP connected to AI Hub | DXP feature | [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp) |
 | Fragments and master pages | DXP feature | [Managing Fragments](https://learn.liferay.com/w/dxp/site-building/creating-pages/page-fragments-and-widgets/using-fragments/managing-fragments), [Master Page Templates](https://learn.liferay.com/w/dxp/site-building/creating-pages/defining-headers-and-footers/master-page-templates) |
