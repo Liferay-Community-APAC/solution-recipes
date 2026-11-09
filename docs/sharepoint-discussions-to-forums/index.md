@@ -53,22 +53,34 @@ Check SharePoint's site users before you start. Posts by someone without an emai
 ### Step 3: Create the Migration Project
 
 1. Start Migration Studio and open it in your browser.
-1. Click **New project** and choose **SharePoint discussion boards → Liferay Forums**.
-1. In **Connections**, enter:
-    - **SharePoint:** the server's address, such as `https://sharepoint.example.com`. SharePoint Server on premises usually needs **NTLM** authentication, with the user as `DOMAIN\user`.
-    - **Liferay:** the forum's Liferay address and the administrator account.
+1. Click **New project** and choose the **SharePoint discussion boards → Liferay Forums** preset. Enter the SharePoint server's address, the SharePoint site (its path under `/sites/`, such as `intranet`), and the forum's Liferay address, then click **Create project**.
 
-    Passwords are read from environment variables on the Migration Studio server, so they're never stored in the project.
-1. In **Settings → Variables**, set `spSite` to the SharePoint site's path under `/sites/`, and `forumSiteKey` to the forum site's friendly URL from Step 1.
-1. Click **Test connection** on each connection. The Liferay connection should show **Liferay DXP**.
+    ![Creating the project from the SharePoint discussion boards → Liferay Forums preset.](new-project.png){: .screenshot }
+
+1. If the forum site's friendly URL isn't `forums`, change `forumSiteKey` in **Settings → Variables**.
+1. In **Connections**, enter the user for each side:
+    - **SharePoint:** a user who can read the site. SharePoint Server on premises usually needs **NTLM** authentication, with the user as `DOMAIN\user`.
+    - **Liferay:** the forum's administrator account.
+
+    Write passwords as `env:` followed by the name of an environment variable on the Migration Studio server, such as `env:LUMT_SOURCE_PASSWORD`, so they're never stored in the project.
+1. Click **Test connection** on each connection. The Liferay connection must show **Liferay DXP**: Migration Studio doesn't load into Liferay Community Edition.
+
+    ![Both connections tested: SharePoint connected, and the forum's Liferay connected as the administrator and identified as Liferay DXP.](connections.png){: .screenshot }
 
 ### Step 4: Extract, Dry Run and Load
 
-On the project's **Overview** page:
+Migration Studio works out the order from the mappings: users and categories first, then discussions, their original posts and replies (each reply after the one it answers), then attachments, likes, and finally each discussion's last post date. **Run order** shows it:
+
+![The run order Migration Studio worked out: users and categories first, then threads, original posts and replies, then attachments, likes and last post dates.](run-order.png){: .screenshot }
+
+On the **Runs** page:
 
 1. **Extract** reads the discussion boards, site users, discussions, replies, attachments and likes from SharePoint, and stages them.
-1. **Dry run** shows every request the load would send to Liferay, without writing anything. Review it.
-1. **Load** writes to the forum. Migration Studio works out the order: users and categories first, then discussions, their original posts and replies (each reply after the one it answers), then attachments, likes, and finally each discussion's last post date.
+1. **Dry run** prepares every request the load would send to Liferay, without writing anything. Check that nothing failed, and use **Download requests** to review them.
+
+    ![A dry run: every user, category, thread, post, reply, attachment and like prepared, none failed, and nothing written to Liferay.](dry-run.png){: .screenshot }
+
+1. **Load** writes to the forum.
 
 How SharePoint maps to Liferay Forums:
 
@@ -93,13 +105,15 @@ Click **Validate**. Migration Studio checks:
 
 - **Counts:** every discussion, reply, attachment and like was loaded.
 - **A sample of migrated posts,** read back from Liferay and compared field by field with SharePoint, including the author.
-- **Dependencies:** posts whose author wasn't migrated, for example *51 posts and replies by "Former Employee", a user without an email address*.
+- **Records that point to something not migrated:** posts whose author wasn't migrated, such as the posts and replies by *Former Employee*, a SharePoint user without an email address. The migration account posted them instead.
 
-![A migrated discussion: the original SharePoint dates, nested replies, and likes as votes. The original post is by a SharePoint user without an email address, so the migration account posted it.](migrated-thread.png){: .screenshot }
+![Validation: everything loaded and matched the spot check. Threads, posts and replies are marked "check" because 66 of them are by Former Employee, who wasn't migrated.](validation.png){: .screenshot }
 
 ## Result
 
 Open the forum. Each SharePoint board is a category, and its discussions show their replies in the same tree as in SharePoint, with best answers marked and likes counted as votes. Sign in as a migrated member and check that their posts show them as the author.
+
+![A migrated discussion: the original author and SharePoint date, the solved banner and accepted answer, nested replies, likes as votes, and an attachment. The "Test Test" reply was written in SharePoint by Former Employee, so the migration account posted it.](migrated-thread.png){: .screenshot }
 
 **Tested:** Liferay Forums 1.0.0 on Liferay DXP 2026.Q1.4 LTS with PostgreSQL, against a simulated SharePoint Server 2016 REST API. It migrated 60 discussions, 281 messages nested up to three levels, 38 attachments and 308 likes, with no errors. Every post kept its author, except the 51 by a user without an email address. **Run a test migration from your own SharePoint farm into a test forum first.**
 
