@@ -70,7 +70,7 @@ All are available under the same licenses as Liferay Forums: [LGPL-2.1-or-later]
 - An AI Hub account, with the **Client ID** and **Client Secret** Liferay provided for it. The summary service signs in to AI Hub with them to run the agent, so they must be allowed to run agents: the scope `Liferay.AI.Hub.REST.everything`. If you're not sure that yours are, ask Liferay Support.
 - Administrator access to the forum's Liferay, and access to the server that runs its Docker containers.
 
-Unlike the [Forums Assistant](../forums-ai-assistant/), the summaries don't need the forum's Liferay connected to AI Hub: the summary service calls AI Hub itself.
+Unlike the [Forums Assistant](../forums-ai-assistant/), the summaries don't need the forum's Liferay connected to AI Hub: the summary service calls AI Hub itself, with the Client ID and Client Secret. So on Liferay DXP 2026.Q1, you don't need the **AI Hub support (LPD-93555 and LPD-107054)** that the Forums Assistant asks Liferay Support for, nor the AI Hub feature flag. If you add the Forums Assistant too, the summaries keep working as they are.
 
 ## Steps
 

@@ -75,7 +75,16 @@ Once the site exists, remove the site initializer zip as the guide says. If it s
 
 The chat runs on the forum's pages and searches the forum as the signed-in member, so the forum's Liferay must be connected to AI Hub. [Integrating AI Hub with Liferay DXP](https://learn.liferay.com/w/ai-hub/integrating-ai-hub-with-liferay-dxp) describes the connection.
 
-1. **On Liferay DXP 2026.Q1, request AI Hub support from Liferay Support.** 2026.Q1 updates, including 2026.Q1.4 that this recipe was tested on, don't include everything the connection needs. Open a Support ticket asking for **AI Hub support (LPD-93555 and LPD-107054)** for your 2026.Q1 update (for example, 2026.Q1.4), and give your current update and hotfix. Liferay Support provides it as a hotfix or as the update that includes it. AI Hub is in beta on 2026.Q1 and backports are in progress, so a later 2026.Q1 update may include them: check with Liferay Support. On 2026.Q3 and later, where AI Hub is generally available, skip this step.
+1. **On Liferay DXP 2026.Q1, request AI Hub support from Liferay Support.** 2026.Q1 updates, including 2026.Q1.4 that this recipe was tested on, don't include everything the connection needs. Open a Support ticket asking for **AI Hub support (LPD-93555 and LPD-107054)** for your 2026.Q1 update (for example, 2026.Q1.4), and give your current update and hotfix:
+
+    | LPD | What it adds |
+    | --- | --- |
+    | LPD-107054 | The connection to AI Hub: the *AI Hub* settings in *Instance Settings* (Step 3), and the sign-in the chat uses for members |
+    | LPD-93555 | AI Hub's searches of the forum as the signed-in member, so the chat only finds what that member can see |
+
+    The **AI Hub Chat** fragment loads AI Hub's own chat, so you don't need other AI Hub backports for this recipe.
+
+    Liferay Support provides it as a hotfix or as the update that includes it. AI Hub is in beta on 2026.Q1 and backports are in progress, so a later 2026.Q1 update may include them: check with Liferay Support. On 2026.Q3 and later, where AI Hub is generally available, skip this step.
 1. **On 2026.Q1, turn on the feature flag:** *Control Panel* → *Instance Settings* → *Feature Flags* → *Release*, then enable **AI Hub (LPD-62272)**. On Liferay Self-Hosted, you can set it in `portal-ext.properties` instead:
 
    ```properties
