@@ -4,6 +4,11 @@ nav_order: 30
 recipe: true
 summary: Move SharePoint Server 2016 discussion boards into Liferay Forums, keeping authors, nested replies, best answers, attachments and likes.
 description: Migrate SharePoint Server 2016 discussion boards to Liferay Forums with Liferay Migration Studio, keeping authors, replies, best answers, attachments and likes.
+tags: [Liferay Forums, Migration Studio, SharePoint, Migration, Batch import]   # shown on the recipe and its card, and used by the filter on the home page
+apps:                    # Marketplace Apps the recipe builds on: their logos show on its card
+  - name: Liferay Forums
+    logo: /assets/apps/liferay-forums.png
+    url: /liferay-forums/
 ---
 
 # SharePoint Discussions to Liferay Forums
@@ -25,7 +30,7 @@ Your SharePoint Server 2016 discussion boards, moved into a [Liferay Forums](/li
 
 | Ingredient | Type | Guide |
 | --- | --- | --- |
-| Liferay Forums 1.0.0 | Marketplace App | [App page](/marketplace-apps/#liferay-forums), [Liferay Forums guide](/liferay-forums/), [download](https://github.com/Liferay-Community-APAC/liferay-forums/releases/latest) |
+| <span class="with-logo"><img class="inline-logo" src="{{ '/assets/apps/liferay-forums.png' | relative_url }}" alt="" width="24" height="24">Liferay Forums 1.0.0</span> | Marketplace App | [App page](/marketplace-apps/#liferay-forums), [Liferay Forums guide](/liferay-forums/), [download](https://github.com/Liferay-Community-APAC/liferay-forums/releases/latest) |
 | Liferay Migration Studio (coming soon) | Marketplace App | [App page](/marketplace-apps/#liferay-migration-studio), [Liferay Migration Studio guide](/liferay-migration-studio/) |
 | Batch import that keeps each record's creator | DXP feature | [Batch Engine API Basics: Importing Data](https://learn.liferay.com/w/dxp/integration/headless-apis/using-liferay-as-a-headless-platform/consuming-apis/batch-engine-api-basics-importing-data) |
 
