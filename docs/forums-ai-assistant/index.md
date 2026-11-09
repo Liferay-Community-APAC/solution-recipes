@@ -4,6 +4,11 @@ nav_order: 10
 recipe: true
 summary: Add an AI chat to Liferay Forums that tells members where to find the discussions they're looking for, searching only what each member can see.
 description: Add a Liferay AI Hub chat assistant to Liferay Forums that finds forum discussions for signed-in members.
+product:                 # the Liferay product the recipe showcases: shown with its logo on the recipe and its card
+  name: Liferay AI Hub
+  logo: /assets/products/ai-hub.png
+  url: https://www.liferay.com/capabilities/ai-hub
+  blurb: Liferay AI Hub lets you deploy AI agents that learn, make decisions, and improve your digital experiences, without the technical barriers.
 ---
 
 # Forums Assistant with AI Hub
@@ -11,6 +16,8 @@ description: Add a Liferay AI Hub chat assistant to Liferay Forums that finds fo
 
 {: .important }
 Liferay AI Hub is in beta: [request access](https://learn.liferay.com/w/ai-hub/index) before you start. On Liferay DXP 2026.Q1, you also need AI Hub support for your update, which you request from Liferay Support (Step 2).
+
+{% include product-spotlight.html %}
 
 1. TOC
 {:toc}
