@@ -234,12 +234,230 @@ The skill lists the usual Liferay causes:
 
 **Optional:** Playwright 1.56 and later include [test agents](https://playwright.dev/docs/test-agents) (*planner*, *generator* and *healer*) that you can add to Claude Code with `npx playwright init-agents --loop=claude`. The healer replays a failing test and proposes a fix. Use it when a selector really changed, never to make a real regression pass. The rules in your `e2e-tests` skill still apply.
 
+## Common Liferay Regression Scenarios
+
+A typical Liferay regression request covers the same business checks: makers create and edit pages and web content, customers navigate the site, search it and submit forms, emails reach the right people, content goes through a publishing workflow, and no links are broken. This section explains how to approach each one with this suite, how feasible it is, and what it needs. Use it to plan your suite, or to answer an automation assessment.
+
+### Principles That Apply to Every Scenario
+
+- **One test user per role.** Create a test user for each role in the scenario, such as `maker`, `approver` and `customer`, and add them to `test-users.properties` and `E2E_PERSONAS`. A test proves what *that role* can do, so it never runs as the administrator.
+- **Set up and clean up through the API; test the behaviour in the UI.** Use the UI only for the step the scenario is about, such as the maker editing a page. Create what the test needs beforehand, and delete what it created afterwards, through Liferay's headless APIs. That keeps tests fast, and keeps them from failing because of a screen they aren't testing.
+- **An admin API connection is for setup, cleanup and back-end checks only.** For example, it can confirm that a form record was saved. It never decides what a user sees. Give it its own credentials (`E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD` in the snippets below), kept out of Git like the test users.
+- **Mark test data.** Give everything a test creates a unique run marker, such as `e2e-<timestamp>` in its title, so the test can find it and nobody mistakes it for real content.
+- **Run tests that change data on a test or UAT environment, never on production.** Read-only checks such as links, search and customer journeys can also run on production as a smoke test, with care.
+- **Wait for asynchronous work instead of sleeping.** Search indexing, workflow and email all happen a little after the action that triggers them. Use `expect.poll` or `expect(…).toPass()` with a timeout, never a fixed `waitForTimeout`.
+- **Tag tests by area** (`@pages`, `@content`, `@links`, `@search`, `@forms`, `@email`, `@workflow`), so you can run one area with `--grep` and schedule them differently.
+
+`tests/e2e/lib/liferay.js` has a helper for the admin API connection. Use it in a test like this:
+
+```javascript
+import {adminAPI} from './lib/liferay.js';
+
+test('…', async ({baseURL, page, playwright}) => {
+	const api = await adminAPI(playwright, baseURL);
+
+	// For example: create test content with api.post(…), and delete it with api.delete(…) when the test ends.
+});
+```
+
+### Page Management: Create and Edit Pages as a Maker
+
+Sign in as the `maker` test user, create a content page in the site's page administration, add a fragment, publish it, and then check the published page as Guest. A second test edits an existing page and checks the change. Also prove the other side: a user without the maker role can't add a page.
+
+- **Feasibility: medium.** The page editor is the most complex screen in Liferay: drag and drop, side panels, and markup that changes between quarterly releases. Keep the editor steps few and use labels the user sees (`getByRole`, `getByLabel`). Record the first draft with `npx playwright codegen <url>`, then have the agent tidy it up.
+- **Cleanup:** delete the test page afterwards by its `e2e-` name, through the page administration UI or a headless API your Liferay version supports.
+
+### Web Content: Create and Edit Web Content
+
+As the `maker`, create a Basic Web Content article in **Content & Data → Web Content**, edit it, and publish it. Then, as Guest, open the page that displays it and check the new text is there.
+
+- **Feasibility: high.** The web content editor is form-based and stable.
+- **Setup and cleanup** go through `headless-delivery`: `POST /o/headless-delivery/v1.0/sites/{siteId}/structured-contents` creates an article for an edit test to start from, and `DELETE /o/headless-delivery/v1.0/structured-contents/{id}` removes it.
+
+### Customer Journey: Access and Navigate the Site as a Customer
+
+As the `customer`, and as Guest where the site is public, follow the menu the way a person would (`getByRole('link', {name: …})`). On each step, check the page's heading and one piece of content only that page has.
+
+- **Feasibility: high.** This is what the suite does best.
+- Write one test per journey, such as *find a product → read its details → contact us*, rather than one test per page.
+
+### Broken Links: Verify Links and Report Broken Ones
+
+Open your key pages, collect every link to your own site, and request each one. The test fails with a list of the broken links, which is also attached to the report:
+
+```javascript
+import {expect, test} from '@playwright/test';
+
+const START_PAGES = ['/', '/web/<your-site>/about-us'];
+
+test('key pages have no broken links', {tag: '@links'}, async ({baseURL, page}) => {
+	const origin = new URL(baseURL).origin;
+	const links = new Set();
+
+	for (const path of START_PAGES) {
+		await page.goto(path);
+
+		const hrefs = await page.locator('a[href]').evaluateAll((anchors) => anchors.map((anchor) => anchor.href));
+
+		for (const href of hrefs) {
+			const url = new URL(href);
+
+			if (url.origin === origin && !url.pathname.includes('/c/portal/logout')) {
+				url.hash = '';
+				links.add(url.toString());
+			}
+		}
+	}
+
+	const broken = [];
+
+	for (const url of links) {
+		const response = await page.request.get(url);
+
+		if (response.status() >= 400) {
+			broken.push(`${response.status()} ${url}`);
+		}
+	}
+
+	await test.info().attach('broken-links.txt', {body: broken.join('\n') || 'none', contentType: 'text/plain'});
+
+	expect(broken).toEqual([]);
+});
+```
+
+- **Feasibility: high.**
+- **Run it as each role.** `page.request` shares the signed-in user's session, so run it as Guest and as each test user. A page closed to Guest answers `404` to Guest. So a link Guest can see that leads to a members-only page shows up as broken, which is usually a real problem: Guest shouldn't see that link.
+- **External links:** check them in a separate, non-blocking test, or less often. Other sites rate-limit, block automated requests and go down, and none of that is a regression in your site.
+
+### Search: Search and Check the Expected Results
+
+Search for a term with a known best answer, check the expected page is in the results, and open it. Run it as Guest and as signed-in users: search only returns what that user may see, so results differ by role.
+
+```javascript
+test('searching "pricing" finds the pricing page', {tag: '@search'}, async ({page}) => {
+	await page.goto('/web/<your-site>/search?q=pricing');
+
+	const result = page.getByRole('link', {name: 'Pricing'});
+
+	await expect(result).toBeVisible();
+	await result.click();
+	await expect(page).toHaveURL(/pricing/);
+});
+```
+
+- **Feasibility: high.**
+- Content a test has just created reaches search only after it's indexed. Wrap that check in `await expect(async () => { … }).toPass({timeout: 60_000})` so it retries.
+
+### Form Submission and Submission Verification
+
+As the `customer` or Guest, open the form, fill it in by label (`getByLabel('Email')`), submit it, and check the success message. Then verify the submission on the back end through the admin API:
+
+- **Liferay Forms:** `GET /o/headless-form/v1.0/forms/{formId}/form-records` lists the records. Find yours by the run marker you typed into a field.
+- **A form that saves to an object** (Form Container): `GET /o/c/<objects>?filter=…` finds the entry by the run marker.
+
+**Feasibility: high.** Delete the test records afterwards, so reports and notifications for the real data stay clean.
+
+### Email: Check That Internal Recipients Get the Notification
+
+Never test against real inboxes. On the test environment, point Liferay's outgoing mail at a **mail catcher**, such as [Mailpit](https://mailpit.axllent.org/), which accepts every email and makes it readable through an API. Set it in **Control Panel → Server Administration → Mail**, or in `portal-ext.properties`:
+
+```properties
+mail.session.mail.smtp.host=localhost
+mail.session.mail.smtp.port=1025
+```
+
+After the form test submits, wait for the notification and check its recipients and subject:
+
+```javascript
+const MAILPIT = process.env.MAILPIT_URL || 'http://localhost:8025';
+
+async function waitForEmail(request, text) {
+	let message;
+
+	await expect
+		.poll(
+			async () => {
+				const response = await request.get(`${MAILPIT}/api/v1/search?query=${encodeURIComponent(text)}`);
+
+				message = (await response.json()).messages?.[0];
+
+				return Boolean(message);
+			},
+			{timeout: 60_000}
+		)
+		.toBe(true);
+
+	return message;
+}
+
+// In the form test, after the submission:
+
+const email = await waitForEmail(page.request, runMarker);
+
+expect(email.To.map((to) => to.Address)).toContain('enquiries@example.com');
+expect(email.Subject).toContain('New enquiry');
+```
+
+- **Feasibility: high with a mail catcher.**
+- **On a shared UAT that must keep its real mail server,** use a dedicated test mailbox and read it through its provider's API, such as Microsoft Graph or Gmail. That's medium feasibility and more setup.
+
+### Publishing Workflow: Submit, Approve and Publish
+
+With a workflow such as Single Approver enabled for web content or pages, the test follows the content through three users:
+
+1. The **`maker`** creates or edits the content and submits it for publication. Check its status reads **Pending**.
+1. **Guest** can't see the change yet.
+1. The **`approver`** opens the task from **My Workflow Tasks**, assigns it to themselves and approves it. Use a second browser context, `browser.newContext({storageState: authFile('approver')})`, in the same test.
+1. **Guest** now sees the published content.
+
+Also test a **rejection**: the content goes back to the maker and is never published.
+
+- **Feasibility: medium to high.** It takes several users and screens, so give it more time per test.
+- To test approval and rejection separately from the editing, start them from content already submitted through the API. The `headless-admin-workflow` API lists and moves workflow tasks (`/o/headless-admin-workflow/v1.0/workflow-tasks/…`).
+- **If you use Staging,** add the *publish to live* step and check the live site, not the staging site.
+
+### Coverage, Approach and Effort
+
+| Scenario | How to automate it | Feasibility | Relative effort |
+| --- | --- | --- | --- |
+| Create and edit pages as a maker | UI as the maker, cleanup by name | Medium | Large |
+| Create and edit web content | UI for the edit, API for setup and cleanup | High | Medium |
+| Customer journeys | One test per journey, per role | High | Small per journey |
+| Broken links | Link check of key pages, per role | High | Small |
+| Search | Known terms and expected results, per role | High | Small |
+| Form submission and verification | UI submit, records checked through the API | High | Small to medium per form |
+| Email notifications | Mail catcher on the test environment | High (medium with a real mailbox) | Medium, mostly one-time setup |
+| Publishing workflow | Maker, approver and Guest in one test | Medium to high | Large |
+
+What makes the effort larger:
+
+- **How many** journeys, forms and workflows you cover, and how many roles each one runs as.
+- **Test data and test users** for each environment, kept the same everywhere the suite runs.
+- **Environment work**: a mail catcher, test users that don't need a password change at first sign-in, and workflow enabled where you test it.
+- **Customizations** such as custom fragments, client extensions or a custom theme. They need selectors read from their source.
+
+Start with the cheapest, highest-value tests: customer journeys, broken links, search and one form. Add the page, web content and workflow tests after that.
+
+If you already have a regression framework, compare it with the table above before you start. Your agent can help:
+
+```
+Using e2e-tests, assess our regression automation for these scenarios:
+<paste your list of scenarios>
+
+For each one, look at our existing test framework in <path or repository>
+and at this workspace, and tell me whether it's covered today, what's
+missing, how you'd automate it with the Playwright suite in tests/e2e,
+how feasible that is, and a relative size (S/M/L) with what drives it.
+Don't write any tests yet.
+```
+
 ## Result
 
 From `tests/e2e`, `npx playwright test` signs each test user in once, runs every spec as those users and as Guest, and writes an HTML report, with a trace and a screenshot of each failure.
 
 To build the suite up:
 
+- Cover the [common regression scenarios](#common-liferay-regression-scenarios), starting with journeys, links, search and one form.
 - Ask the agent for a test whenever you finish a ticket, from the ticket's acceptance criteria, so every feature you ship stays covered.
 - Run every test for a ticket with `npx playwright test --grep @PROJ-123`.
 - Run the suite against your test environment with `LIFERAY_BASE_URL` before you promote a release.
