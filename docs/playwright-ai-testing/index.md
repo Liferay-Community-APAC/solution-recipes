@@ -1,10 +1,7 @@
 ---
 title: AI-Assisted Test Automation with Playwright
 nav_order: 40
-recipe: false          # draft: unlisted until reviewed; set to true (and remove the three lines below) to list it
-nav_exclude: true
-search_exclude: true
-sitemap: false
+recipe: true
 summary: Add a Playwright test suite to your Liferay Workspace that checks what real users see, and let your AI coding agent write, run and triage the tests.
 description: Add Playwright end-to-end tests to an existing Liferay Workspace, and use an AI coding agent to write, run and triage them.
 tags: [Playwright, Testing, AI coding agents, Claude Code, Liferay Workspace]   # shown on the recipe and its card, and used by the filter on the home page
@@ -12,9 +9,6 @@ tags: [Playwright, Testing, AI coding agents, Claude Code, Liferay Workspace]   
 
 # AI-Assisted Test Automation with Playwright
 {: .no_toc }
-
-{: .note }
-**DRAFT for review.**
 
 1. TOC
 {:toc}
