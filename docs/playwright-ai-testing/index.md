@@ -52,6 +52,8 @@ your-workspace/
 - Google Chrome installed. The suite uses your installed Chrome, so Playwright doesn't need to download a browser.
 - One or more **test users** that can sign in. Use ordinary accounts, never the administrator.
 
+The suite, the examples and the screenshots on this page were run against Liferay Portal 7.4 GA132 (Community Edition) in Docker, with Mailpit as the mail catcher.
+
 {: .important }
 Never test as the administrator. An admin session or a Basic Auth request can read things a real user can't, so the test passes even when the user's view is broken. The suite signs in as each test user through the normal sign-in page.
 
@@ -71,16 +73,16 @@ Never test as the administrator. An admin session or a Basic Auth request can re
 
 | File | What it does |
 | --- | --- |
-| `lib/liferay.js` | Signs a test user in through `/c/portal/login`, which shows the Login portlet on any site. Then it checks whose session it is by calling `/o/headless-admin-user/v1.0/my-user-account`. It also has `sessionFetch` for calling a headless API from the page as that user. |
+| `lib/liferay.js` | Signs a test user in through `/c/portal/login`, which shows the Login portlet on any site. Then it checks whose session it is by calling `/o/headless-admin-user/v1.0/my-user-account`. It also has `sessionFetch`, for calling a headless API from the page as that user, and `adminAPI`, for test setup and cleanup (see [Common Liferay Regression Scenarios](#common-liferay-regression-scenarios)). |
 | `env.js` | Works out the base URL, the test users file, and which test users to sign in |
-| `auth.setup.js` | Runs first: signs each test user in once and saves the session to `.auth/<alias>.json` |
+| `auth.setup.js` | Runs first: signs each test user in once and saves the session to `.auth/<alias>.json`. It signs in through a browser that Playwright doesn't trace, so passwords never appear in a trace or the report, even with `--trace on`. |
 | `playwright.config.js` | Uses your installed Chrome, keeps a trace and a screenshot of each failure, and writes an HTML report |
 | `smoke.spec.js` | Three first tests: as Guest, the home page loads signed out and the Control Panel answers `404`; the `member` test user is signed in |
 
 ### Step 2: Add Your Test Users
 
 1. In Liferay, create a test user, or use an existing non-admin account, with the roles and site membership that the user you're testing would have.
-1. **Sign in once as that user by hand**, in a private browser window. New users often have to change their password, accept the terms of use, or set a security question at first sign-in. The suite stops at these screens and tells you which one it hit; it doesn't complete them for you.
+1. **Sign in once as that user by hand**, in a private browser window, and complete any first-login screens. A user created by an administrator or through the API usually has to **verify their email address** and **change their password** the first time. On Liferay Portal 7.4 GA132, the password change was required even with `passwords.default.policy.change.required=false`. Other instances can also ask for the terms of use or a security question. The suite stops at these screens and names the one it hit (Step 7 shows an example); it doesn't complete them for you.
 1. Copy `tests/e2e/test-users.properties.example` to `tests/e2e/test-users.properties` and add each test user under a short alias:
 
    ```properties
@@ -112,6 +114,10 @@ To see the report, with a trace and a screenshot of any failure:
 ```bash
 npx playwright show-report
 ```
+
+![The Playwright HTML report of a run against Liferay: three test users signed in, then search, email, broken-link and smoke tests, all passed and tagged by area.](report-overview.png){: .screenshot }
+
+The report above is from a run of the suite with the example tests from [Common Liferay Regression Scenarios](#common-liferay-regression-scenarios).
 
 The suite finds the address of your Liferay on its own:
 
@@ -225,12 +231,20 @@ The skill lists the usual Liferay causes:
 
 | Symptom | Usual cause |
 | --- | --- |
-| Setup stops on `/c/portal/update_password`, `update_terms_of_use` or `update_reminder_query` | A first-login screen: sign in once by hand as that user |
+| Setup stops on a first-login screen, such as "Verify Email Address" or "Change Password" | The test user hasn't completed their first sign-in: sign in once by hand as that user |
 | "The Login portlet says: Authentication failed" | Wrong password, an inactive user, or an instance that signs in by screen name rather than email |
 | A list is empty for the test user but full for the admin | A missing permission (or, for Guest, a Service Access Policy), not missing data |
 | A bare `403` with an empty body from a headless call | A Service Access Policy, an OAuth scope, or a call made without the `x-csrf-token` header |
 | Navigation times out over `localhost` | `web.server.host` is set: use the public URL with `LIFERAY_BASE_URL` |
 | Every test fails after a server restart | The server is still starting; the setup signs in again on the next run |
+
+For example, a test user created through the API, who has never signed in, stops the setup with a message that names the screen:
+
+![The report for a failed sign-in: "Sign-in stopped on a first-login screen ("Verify Email Address"). Sign in once by hand as newhire@example.com to complete it."](report-failure.png){: .screenshot }
+
+The setup attaches a screenshot of the screen it stopped on:
+
+![Liferay's Verify Email Address screen, asking for the email verification code.](first-login-screen.png){: .screenshot }
 
 **Optional:** Playwright 1.56 and later include [test agents](https://playwright.dev/docs/test-agents) (*planner*, *generator* and *healer*) that you can add to Claude Code with `npx playwright init-agents --loop=claude`. The healer replays a failing test and proposes a fix. Use it when a selector really changed, never to make a real regression pass. The rules in your `e2e-tests` skill still apply.
 
@@ -242,19 +256,20 @@ A typical Liferay regression request covers the same business checks: makers cre
 
 - **One test user per role.** Create a test user for each role in the scenario, such as `maker`, `approver` and `customer`, and add them to `test-users.properties` and `E2E_PERSONAS`. A test proves what *that role* can do, so it never runs as the administrator.
 - **Set up and clean up through the API; test the behaviour in the UI.** Use the UI only for the step the scenario is about, such as the maker editing a page. Create what the test needs beforehand, and delete what it created afterwards, through Liferay's headless APIs. That keeps tests fast, and keeps them from failing because of a screen they aren't testing.
-- **An admin API connection is for setup, cleanup and back-end checks only.** For example, it can confirm that a form record was saved. It never decides what a user sees. Give it its own credentials (`E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD` in the snippets below), kept out of Git like the test users.
+- **An admin API connection is for setup, cleanup and back-end checks only.** For example, it can confirm that a form record was saved. It never decides what a user sees. Give it its own credentials in `E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD`, set in the environment and never committed.
+- **Keep credentials out of traces and reports.** A Playwright trace records what the browser typed and every request's headers, and the report shows the value of each `fill()`. That's why the suite signs in through an untraced browser and `adminAPI` uses Node's `fetch`. Keep it that way when you add tests: never `fill()` a password in a traced test, and never call an authenticated API through Playwright's `request`. Even so, treat traces and reports as test output that may hold test data, and don't publish them.
 - **Mark test data.** Give everything a test creates a unique run marker, such as `e2e-<timestamp>` in its title, so the test can find it and nobody mistakes it for real content.
 - **Run tests that change data on a test or UAT environment, never on production.** Read-only checks such as links, search and customer journeys can also run on production as a smoke test, with care.
 - **Wait for asynchronous work instead of sleeping.** Search indexing, workflow and email all happen a little after the action that triggers them. Use `expect.poll` or `expect(…).toPass()` with a timeout, never a fixed `waitForTimeout`.
 - **Tag tests by area** (`@pages`, `@content`, `@links`, `@search`, `@forms`, `@email`, `@workflow`), so you can run one area with `--grep` and schedule them differently.
 
-`tests/e2e/lib/liferay.js` has a helper for the admin API connection. Use it in a test like this:
+`tests/e2e/lib/liferay.js` has a helper for the admin API connection. Its methods work like Playwright's request API (`api.get(url)`, `api.post(url, {data})`, `response.ok()`, `response.json()`), and the [search example](#search-search-and-check-the-expected-results) below shows it in a real test:
 
 ```javascript
 import {adminAPI} from './lib/liferay.js';
 
-test('…', async ({baseURL, page, playwright}) => {
-	const api = await adminAPI(playwright, baseURL);
+test('…', async ({baseURL, page}) => {
+	const api = await adminAPI(baseURL);
 
 	// For example: create test content with api.post(…), and delete it with api.delete(…) when the test ends.
 });
@@ -272,7 +287,7 @@ Sign in as the `maker` test user, create a content page in the site's page admin
 As the `maker`, create a Basic Web Content article in **Content & Data → Web Content**, edit it, and publish it. Then, as Guest, open the page that displays it and check the new text is there.
 
 - **Feasibility: high.** The web content editor is form-based and stable.
-- **Setup and cleanup** go through `headless-delivery`: `POST /o/headless-delivery/v1.0/sites/{siteId}/structured-contents` creates an article for an edit test to start from, and `DELETE /o/headless-delivery/v1.0/structured-contents/{id}` removes it.
+- **Setup and cleanup** go through `headless-delivery`: `POST /o/headless-delivery/v1.0/sites/{siteId}/structured-contents` creates an article for an edit test to start from, and `DELETE /o/headless-delivery/v1.0/structured-contents/{id}` removes it. Set `"viewableBy": "Anyone"` when you create it: an article created through the API without it can be seen only by its owner, so Guest and the test users never find it.
 
 ### Customer Journey: Access and Navigate the Site as a Customer
 
@@ -333,20 +348,70 @@ test('key pages have no broken links', {tag: '@links'}, async ({baseURL, page}) 
 
 Search for a term with a known best answer, check the expected page is in the results, and open it. Run it as Guest and as signed-in users: search only returns what that user may see, so results differ by role.
 
+To test search reliably, have the test create its own content and search for it. This example creates a web content article through the admin API, searches for it as Guest and as the member, and deletes it afterwards:
+
 ```javascript
-test('searching "pricing" finds the pricing page', {tag: '@search'}, async ({page}) => {
-	await page.goto('/web/<your-site>/search?q=pricing');
+import {expect, test} from '@playwright/test';
 
-	const result = page.getByRole('link', {name: 'Pricing'});
+import {authFile} from './env.js';
+import {adminAPI} from './lib/liferay.js';
 
-	await expect(result).toBeVisible();
-	await result.click();
-	await expect(page).toHaveURL(/pricing/);
+const SITE_ID = 20117; // Your site's ID
+const BASIC_WEB_CONTENT = 30112; // The Basic Web Content structure's ID
+const RUN = `e2e-${Date.now()}`;
+
+let api;
+let articleId;
+
+test.beforeAll(async ({baseURL}) => {
+	api = await adminAPI(baseURL);
+
+	const response = await api.post(`/o/headless-delivery/v1.0/sites/${SITE_ID}/structured-contents`, {
+		data: {
+			contentFields: [{contentFieldValue: {data: '<p>Our solar panels carry a 25-year warranty.</p>'}, name: 'content'}],
+			contentStructureId: BASIC_WEB_CONTENT,
+			title: `${RUN} Solar Panel Warranty`,
+			viewableBy: 'Anyone',
+		},
+	});
+
+	expect(response.ok()).toBe(true);
+
+	articleId = (await response.json()).id;
 });
+
+test.afterAll(async () => {
+	await api?.delete(`/o/headless-delivery/v1.0/structured-contents/${articleId}`);
+});
+
+for (const alias of ['guest', 'member']) {
+	test.describe(`as ${alias}`, () => {
+		if (alias !== 'guest') {
+			test.use({storageState: authFile(alias)});
+		}
+
+		test('search finds new web content', {tag: ['@search', '@content']}, async ({page}) => {
+
+			// New content reaches search only after it's indexed, so retry.
+
+			await expect(async () => {
+				await page.goto(`/search?q=${encodeURIComponent(RUN)}`);
+				await expect(page.getByText('Solar Panel Warranty').first()).toBeVisible({timeout: 2_000});
+			}).toPass({timeout: 60_000});
+
+			await expect(page.getByText('25-year warranty')).toBeVisible();
+		});
+	});
+}
 ```
 
+The trace of the member's test shows the search results page at the moment of the check:
+
+![The Playwright trace viewer: the steps on the left, and Liferay's search results page showing the "Solar Panel Warranty" web content article, with the checked text highlighted.](trace-viewer.png){: .screenshot }
+
 - **Feasibility: high.**
-- Content a test has just created reaches search only after it's indexed. Wrap that check in `await expect(async () => { … }).toPass({timeout: 60_000})` so it retries.
+- **Finding the IDs:** your site's ID is in **Site Settings**, or in `GET /o/headless-admin-user/v1.0/sites/by-friendly-url-path/<site>`. The Basic Web Content structure belongs to the Global site, and `GET /o/data-engine/v2.0/sites/<global site ID>/data-definitions/by-content-type/journal` lists it as `BASIC-WEB-CONTENT`.
+- **Your site's search page** may be at another path, such as `/web/<your-site>/search`.
 
 ### Form Submission and Submission Verification
 
@@ -364,7 +429,11 @@ Never test against real inboxes. On the test environment, point Liferay's outgoi
 ```properties
 mail.session.mail.smtp.host=localhost
 mail.session.mail.smtp.port=1025
+admin.email.from.address=liferay@example.com
+admin.email.from.name=Liferay Test
 ```
+
+Also set a **sender address**, in **Instance Settings → Email → Email Sender** or with `admin.email.from.address` as above. Without one, Liferay sends no email at all and only logs `Skipping email because the sender is not specified`: the default sender, `test@domain.invalid`, is on Liferay's own `mail.send.blacklist`.
 
 After the form test submits, wait for the notification and check its recipients and subject:
 
@@ -397,6 +466,10 @@ const email = await waitForEmail(page.request, runMarker);
 expect(email.To.map((to) => to.Address)).toContain('enquiries@example.com');
 expect(email.Subject).toContain('New enquiry');
 ```
+
+The same check works for any email Liferay sends. In the run on this page, a test created a user through the admin API and checked that Liferay's "Your New Account" email reached that address, then deleted the user:
+
+![Mailpit showing Liferay's "Your New Account" email to the test user's address, from the configured sender, with earlier verification and password emails in the inbox.](mailpit-email.png){: .screenshot }
 
 - **Feasibility: high with a mail catcher.**
 - **On a shared UAT that must keep its real mail server,** use a dedicated test mailbox and read it through its provider's API, such as Microsoft Graph or Gmail. That's medium feasibility and more setup.
