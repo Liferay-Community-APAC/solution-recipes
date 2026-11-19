@@ -29,6 +29,9 @@
   {%- assign first_p = content | split: '<p>' | slice: 1, 1 | first | split: '</p>' | first | strip_html | normalize_whitespace | truncate: 160 -%}
   {%- assign desc = page.description | default: first_p | default: site.description %}
   <meta name="description" content="{{ desc | escape }}">
+  {%- if page.noindex %}
+  <meta name="robots" content="noindex, nofollow">
+  {%- endif %}
   <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.url }}">
   <meta property="og:title" content="{% unless is_home %}{{ page.title }} · {% endunless %}{{ site.app_name }}">
   <meta property="og:description" content="{{ desc | escape }}">
