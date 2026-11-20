@@ -33,7 +33,7 @@ tags: [Digital Sales Room, DSR, Liferay DXP 2026.Q4, Client Extensions, Objects,
 | Buyer engagement analytics | Who opened which document, how often, and when | DSR analytics on Liferay Data Platform |
 | AI access (optional) | An AI assistant can ask about a deal or draft content in the CMS | **MCP server** |
 
-![The Northwind Digital public site: a Liferay partner whose every deal runs in a Digital Sales Room, with a Project Estimator in the header.](partner-site.jpg){: .screenshot }
+[![The Northwind Digital public site: a Liferay partner whose every deal runs in a Digital Sales Room, with a Project Estimator in the header.](partner-site.png){: .screenshot }](partner-site.png)
 
 ## Ingredients
 
@@ -67,7 +67,7 @@ Use the DSR build that matches your DXP release. On 2026.Q4, the 2026.Q3 Marketp
 1. Wait for `Server startup in` in the log **before** you open any page. Liferay creates the DSR site (and the CMS site) on the first HTTP request. A request that arrives during startup creates them empty.
 1. Open the **Global Menu** → **Commerce** → **Digital Sales Room Management**. The launchpad has **Home**, **Rooms** and **Analytics**.
 
-![The DSR launchpad: the latest rooms with owner, trend and status, and engagement totals across all rooms.](dsr-home.jpg){: .screenshot }
+[![The DSR launchpad: the latest rooms with owner, trend and status, and engagement totals across all rooms.](dsr-home.png){: .screenshot }](dsr-home.png)
 
 Add the switches the later steps need to `portal-ext.properties`, then restart:
 
@@ -90,7 +90,7 @@ The new CMS ships with 2026.Q4, with no flag needed.
 1. Add the material your sellers reuse in every deal: solution briefs, a professional services catalogue and case studies. Add them in English and Japanese.
 1. Build the public site from fragments: **Home**, **Solutions**, **Professional Services**, **Customer Stories**, **Contact**, plus a **Project Estimator** page for step 9.
 
-![The Sales Enablement Space in the new CMS: case studies, the services catalogue and solution briefs, connected to the Northwind Digital site.](cms-space.jpg){: .screenshot }
+[![The Sales Enablement Space in the new CMS: case studies, the services catalogue and solution briefs, connected to the Northwind Digital site.](cms-space.png){: .screenshot }](cms-space.png)
 
 One source then feeds the website, the rooms and, through MCP, AI assistants.
 
@@ -129,9 +129,9 @@ DSR rooms are records of the **Room** object (`L_DSR_ROOM`). An **Object Action*
 1. **Basic Info:** name it *Apply Northwind template pages*.
 1. **Action Builder:** choose **When** *On After Add* and **Then** *Webhook*. Set the URL of your automation service. For a service on your local network, turn on **Allow Local Network Access** and list its host under **Hosts Allowed**.
 
-![The Room object's actions: one applies the template pages, the other syncs to Salesforce (step 11).](object-actions.jpg){: .screenshot }
+[![The Room object's actions: one applies the template pages, the other syncs to Salesforce (step 11).](object-actions.png){: .screenshot }](object-actions.png)
 
-![The action's webhook: On After Add, Webhook to the automation service, with local network access allowed for that one host.](object-action-webhook.jpg){: .screenshot }
+[![The action's webhook: On After Add, Webhook to the automation service, with local network access allowed for that one host.](object-action-webhook.png){: .screenshot }](object-action-webhook.png)
 
 When it receives the webhook, the service does the following:
 
@@ -148,23 +148,23 @@ In 2026.Q4.0, DSR blocks placed through `headless-admin-site` save but do not re
 1. In the launchpad, open **Rooms** → **New Digital Sales Room**.
 1. **Account Association:** pick the prospect's account.
 
-   ![Step 1 of 3: the room is linked to the Fabrikam Health account.](wizard-1-account.jpg){: .screenshot }
+   [![Step 1 of 3: the room is linked to the Fabrikam Health account.](wizard-1-account.png){: .screenshot }](wizard-1-account.png)
 
 1. **Choose a Template:** pick the deal type. The preview shows the pages the room starts with.
 
-   ![Step 2 of 3: the Northwind templates next to the default DSR template. New logo evaluation adds Mutual action plan, Solution and FAQ.](wizard-2-template.jpg){: .screenshot }
+   [![Step 2 of 3: the Northwind templates next to the default DSR template. New logo evaluation adds Mutual action plan, Solution and FAQ.](wizard-2-template.png){: .screenshot }](wizard-2-template.png)
 
 1. **Name Your Room:** give it a name the buyer recognizes and set a short **Friendly URL**. If you skip it, the URL comes from the account name and can clash with the account's own site, ending up as something like `/contoso-insurance-1`.
 
-   ![Step 3 of 3: room name and friendly URL.](wizard-3-name.jpg){: .screenshot }
+   [![Step 3 of 3: room name and friendly URL.](wizard-3-name.png){: .screenshot }](wizard-3-name.png)
 
 1. Click **Save**. The room opens in the page editor, where you can tailor it before you invite anyone.
 
-   ![A new room in the page editor.](room-editor.jpg){: .screenshot }
+   [![A new room in the page editor.](room-editor.png){: .screenshot }](room-editor.png)
 
 Seconds later, the object action has added the template pages and the personal welcome:
 
-![A room created from the New logo evaluation template: Onboarding, Documents, Mutual action plan, Solution and FAQ, with a welcome to the Contoso Insurance team from their account executive.](template-room-onboarding.jpg){: .screenshot }
+[![A room created from the New logo evaluation template: Onboarding, Documents, Mutual action plan, Solution and FAQ, with a welcome to the Contoso Insurance team from their account executive.](template-room-onboarding.png){: .screenshot }](template-room-onboarding.png)
 
 The demo uses one room for each kind of story a partner meets:
 
@@ -181,13 +181,13 @@ The demo uses one room for each kind of story a partner meets:
 | Proseware Energy | Reignited opportunity: ROI model and reference architecture | Reignited |
 | Lucerne Publishing | AI-ready content: new CMS and MCP | Cold |
 
-![The Rooms list: every deal with owner, dates, trend and status, and the Actions menu (View, Edit, Duplicate, Share, Room Settings, Archive, Delete).](room-actions.jpg){: .screenshot }
+[![The Rooms list: every deal with owner, dates, trend and status, and the Actions menu (View, Edit, Duplicate, Share, Room Settings, Archive, Delete).](room-actions.png){: .screenshot }](room-actions.png)
 
 ### Step 7: Work the deal inside the room
 
 **Documents.** Upload the deal's proposal, draft SOW and mutual action plan, plus shared collateral such as the security overview, under **Documents**. Each document stays inside its room, and every preview and download counts in the analytics. ([Managing Room Documents](https://learn.liferay.com/w/digital-sales-room/managing-room-documents))
 
-![A room's Documents tab with the services proposal, the solution overview and the mutual action plan.](room-documents.jpg){: .screenshot }
+[![A room's Documents tab with the services proposal, the solution overview and the mutual action plan.](room-documents.png){: .screenshot }](room-documents.png)
 
 **Invite by role, with an end date.** Click **Share**, enter emails, pick a role and optionally set **Access Valid Until**. Access then ends at the end of that day (UTC). Invitations are valid for 48 hours.
 
@@ -197,11 +197,11 @@ The demo uses one room for each kind of story a partner meets:
 | Solutions architect, delivery lead | **Content Contributor**: view, comment, upload, share |
 | Other buyers, outside advisors | **Viewer**: view and comment |
 
-![The Share dialog: a buyer's email, Access Valid Until, and the three room roles.](share-roles.jpg){: .screenshot }
+[![The Share dialog: a buyer's email, Access Valid Until, and the three room roles.](share-roles.png){: .screenshot }](share-roles.png)
 
 **Comments.** Use the speech-bubble icon in the room header for questions and answers, with @mentions, so they stay out of email. ([Room Comments](https://learn.liferay.com/w/digital-sales-room/room-comments))
 
-![Room Comments: the seller's note to the buyer, with Reply and votes.](room-comments.jpg){: .screenshot }
+[![Room Comments: the seller's note to the buyer, with Reply and votes.](room-comments.png){: .screenshot }](room-comments.png)
 
 **Close it out.** When a deal is lost, set the trend to *Closed Lost* and **Archive** the room. Archiving can be undone. It makes the room read-only for buyers and keeps the history for the loss review. **Duplicate** copies the pages and the documents you choose into a new room, without comments or members.
 
@@ -209,25 +209,25 @@ The demo uses one room for each kind of story a partner meets:
 
 Connect the instance to **Liferay Data Platform**: **Instance Settings** → **Analytics Cloud**, paste the token. The DSR **Analytics** page then shows time viewed, visits, visitors, actions and comments, the most active visitors and the latest activity. You can see them across all rooms or for one room.
 
-![Analytics overview across all rooms: totals, the most active visitors, and the latest document previews and downloads.](analytics-overview.jpg){: .screenshot }
+[![Analytics overview across all rooms: totals, the most active visitors, and the latest document previews and downloads.](analytics-overview.png){: .screenshot }](analytics-overview.png)
 
 Select a room to see its own numbers, and set its **Room Trend** as the deal moves. The trend has nine values, from *Cold* through *Heating Up*, *Hot* and *Ready to Close* to *Closed Won*, *Closed Lost* or *Reignited*.
 
-![One room's analytics: active days, first visit, and the Room Trend menu with its nine values.](analytics-room-trend.jpg){: .screenshot }
+[![One room's analytics: active days, first visit, and the Room Trend menu with its nine values.](analytics-room-trend.png){: .screenshot }](analytics-room-trend.png)
 
 The **Timeline** tab charts engagement over time and can be filtered by date and user. Use it to spot when a quiet deal comes back to life. ([Engagement Metrics Dashboard](https://learn.liferay.com/w/digital-sales-room/engagement-metrics-dashboard))
 
-![The engagement timeline for the last week.](analytics-timeline.jpg){: .screenshot }
+[![The engagement timeline for the last week.](analytics-timeline.png){: .screenshot }](analytics-timeline.png)
 
 ### Step 9: Let prospects save an estimate from the public site into a room
 
 The **Project Estimator** page on the public site lets a prospect pick what they are building (customer portal, B2B commerce, and so on), the number of users, integrations, languages and hosting. They see the weeks, a services range and a recommended package at once.
 
-![The public Project Estimator: inputs on the left, and an 18-week estimate with services range, package, hosting and managed services on the right.](estimator.jpg){: .screenshot }
+[![The public Project Estimator: inputs on the left, and an 18-week estimate with services range, package, hosting and managed services on the right.](estimator.png){: .screenshot }](estimator.png)
 
 **Saving is for signed-in users only.** Guests see **Sign in to save**, which brings them back to the estimator after they sign in. Signed-in users see **Save to my Digital Sales Room**.
 
-![The save panel as a guest sees it: "Sign in to save".](estimator-guest-save.jpg){: .screenshot }
+[![The save panel as a guest sees it: "Sign in to save".](estimator-guest-save.png){: .screenshot }](estimator-guest-save.png)
 
 When the user clicks save, the page posts the estimate to the automation service with the user's Liferay session cookie and `Liferay.authToken`. The service never trusts the browser. It asks Liferay who the caller is, and refuses guests, expired sessions and forged calls:
 
@@ -259,9 +259,9 @@ In 2026.Q4.0, posting room comments through REST throws `UnsupportedOperationExc
 1. Generate estimate PDFs in the language the user saved from. Japanese PDFs need a CJK font. The demo uses an Adobe-Japan1 CID font.
 1. For a Japanese-speaking buyer or seller, set the user's **Language** to Japanese. They then sign in to a Japanese UI, DSR launchpad included.
 
-![The estimator in Japanese: the same calculator, with labels, results and the save panel in Japanese.](estimator-ja.jpg){: .screenshot }
+[![The estimator in Japanese: the same calculator, with labels, results and the save panel in Japanese.](estimator-ja.png){: .screenshot }](estimator-ja.png)
 
-![A room saved from the Japanese estimator for さくら損害保険: tabs, page names and the saved estimate in Japanese.](estimate-room-ja.jpg){: .screenshot }
+[![A room saved from the Japanese estimator for さくら損害保険: tabs, page names and the saved estimate in Japanese.](estimate-room-ja.png){: .screenshot }](estimate-room-ja.png)
 
 ### Step 11: Show the Salesforce opportunity in every room, and write back
 
@@ -282,7 +282,7 @@ salesforce-connector:
 
 Deploy it from a Liferay Workspace with `blade gw deploy`. Alternatively, register it with a `CETConfiguration` OSGi config in `osgi/configs/` that points `baseURL` at wherever the JavaScript is hosted. The element reads the room's site ID and calls the service, which answers from the CRM.
 
-![The Salesforce opportunity panel in the Contoso room: Proposal/Price Quote, USD 640,000, close date, owner, 65% probability and next step.](salesforce-panel.jpg){: .screenshot }
+[![The Salesforce opportunity panel in the Contoso room: Proposal/Price Quote, USD 640,000, close date, owner, 65% probability and next step.](salesforce-panel.png){: .screenshot }](salesforce-panel.png)
 
 **Write-back.** Add a second object action on the Room object: **On After Update** → **Webhook** to the same service. When a seller changes the Room Trend (step 8), the service maps it to an opportunity stage and updates the opportunity:
 
@@ -294,7 +294,7 @@ Deploy it from a Liferay Workspace with `blade gw deploy`. Alternatively, regist
 | Closed Won / Closed Lost | Closed Won / Closed Lost |
 | Room archived | Closed Lost |
 
-![After the Fabrikam room's trend changed to Heating Up, the panel shows the stage Needs Analysis (35%) and a "Synced from DSR → Salesforce" entry.](salesforce-writeback.jpg){: .screenshot }
+[![After the Fabrikam room's trend changed to Heating Up, the panel shows the stage Needs Analysis (35%) and a "Synced from DSR → Salesforce" entry.](salesforce-writeback.png){: .screenshot }](salesforce-writeback.png)
 
 {: .important }
 The connector in the screenshots is **fictitious**: a mock API stands in for Salesforce. For a real connection, point the service at Salesforce's REST API with OAuth (for example as an OAuth-protected client-extension microservice), and keep the credentials in the service, never in the browser.
