@@ -8,6 +8,7 @@
     parent:     the title of its section page, for pages inside a section
     nav_exclude: true to leave a page out of the sidebar
     search_exclude: true to leave a page out of the site search
+    recipe:     true on a recipe: its sidebar is the recipe's own table of contents (its h2 and h3 headings)
 {%- endcomment -%}
 {%- assign main = site.main_site | default: "" -%}
 {%- assign docs_pages = site.pages | where_exp: "p", "p.title" | where_exp: "p", "p.nav_exclude != true" -%}
@@ -83,10 +84,15 @@
     .recipe-count:empty { display: none; }
     .doc-cards .card.doc[hidden] { display: none; }
     .prose img.inline-logo, img.inline-logo { display: inline-block; width: 24px; height: 24px; margin: 0; flex: none; border: 0; box-shadow: none; }
+    /* A recipe's sidebar is its table of contents, so the copy at the top of the recipe is not needed. */
+    .recipe-page #markdown-toc { display: none; }
+    .recipe-toc .toc-back { color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+    .recipe-toc a.active { background: rgba(20, 122, 69, .1); color: var(--blue); }
+    .docs-nav-list > li > ul a.active { color: var(--blue); }
     @media (max-width: 560px) { .product-spotlight { flex-direction: column; align-items: flex-start; } }
   </style>
 </head>
-<body data-section="{{ site.section_id }}">
+<body data-section="{{ site.section_id }}"{% if page.recipe %} class="recipe-page"{% endif %}>
 
 <header class="site-header" data-site-header>
   <div class="wrap">
@@ -95,6 +101,35 @@
 </header>
 
 <div class="wrap docs">
+  {%- if page.recipe %}
+  {%- comment -%} A recipe's sidebar: back to all recipes, then the recipe's own sections, read from its headings. {%- endcomment %}
+  <details class="docs-nav recipe-toc" id="docs-nav">
+    <summary>On this page</summary>
+    <ul class="docs-nav-list">
+      <li><a class="toc-back" href="{{ '/' | relative_url }}#recipes">&larr; All recipes</a></li>
+      {%- assign heads = content | split: '<h' -%}
+      {%- assign in_h2 = false -%}
+      {%- for h in heads offset: 1 -%}
+        {%- assign lvl = h | slice: 0, 1 -%}
+        {%- unless lvl == "2" or lvl == "3" %}{% continue %}{% endunless -%}
+        {%- unless h contains ' id="' %}{% continue %}{% endunless -%}
+        {%- assign hid = h | split: ' id="' | slice: 1, 1 | first | split: '"' | first -%}
+        {%- assign close = '</h' | append: lvl -%}
+        {%- assign htext = h | split: close | first | split: '>' | shift | join: '>' | strip_html | strip -%}
+        {%- if lvl == "2" -%}
+          {%- if in_h2 %}</ul>{% endif %}{% if in_h2_open %}</li>{% endif -%}
+          {%- assign in_h2 = false -%}
+      <li class="open"><a href="#{{ hid }}">{{ htext }}</a>
+          {%- assign in_h2_open = true -%}
+        {%- else -%}
+          {%- unless in_h2 %}<ul>{% assign in_h2 = true %}{% endunless %}
+          <li><a href="#{{ hid }}">{{ htext }}</a></li>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if in_h2 %}</ul>{% endif %}{% if in_h2_open %}</li>{% endif %}
+    </ul>
+  </details>
+  {%- else %}
   <details class="docs-nav" id="docs-nav">
     <summary>{{ site.app_name }} docs</summary>
     <ul class="docs-nav-list">
@@ -113,6 +148,7 @@
       {%- endfor %}
     </ul>
   </details>
+  {%- endif %}
 
   <main class="docs-main">
     <p class="docs-crumbs">
@@ -154,6 +190,26 @@
     var mq = window.matchMedia('(min-width: 961px)');
     function sync() { if (mq.matches) nav.open = true; }
     sync(); mq.addEventListener('change', sync);
+    // On a recipe, highlight the section being read in the sidebar.
+    var toc = document.querySelector('.recipe-toc');
+    if (toc) {
+      var links = {};
+      toc.querySelectorAll('a[href^="#"]').forEach(function (a) { links[decodeURIComponent(a.hash.slice(1))] = a; });
+      var heads = Array.prototype.filter.call(document.querySelectorAll('.prose h2[id], .prose h3[id]'), function (h) { return links[h.id]; });
+      var current = null;
+      function mark() {
+        var top = null;
+        heads.forEach(function (h) { if (h.getBoundingClientRect().top < 140) top = h; });
+        top = top || heads[0];
+        if (top && top !== current) {
+          if (current) links[current.id].classList.remove('active');
+          links[top.id].classList.add('active'); current = top;
+        }
+      }
+      window.addEventListener('scroll', mark, { passive: true }); mark();
+      // On phones the menu is folded: fold it again after a section is picked.
+      toc.addEventListener('click', function (e) { if (e.target.closest('a[href^="#"]') && !mq.matches) nav.open = false; });
+    }
     // A "#" link on each heading, for sharing a section.
     document.querySelectorAll('.prose h2[id], .prose h3[id], .prose h4[id]').forEach(function (h) {
       var a = document.createElement('a');
