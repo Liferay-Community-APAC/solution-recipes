@@ -1,11 +1,7 @@
 ---
 title: Sell Liferay and Services Through Digital Sales Rooms
 nav_order: 50
-recipe: false          # draft: not listed on the home page yet
-nav_exclude: true
-search_exclude: true
-sitemap: false
-noindex: true
+recipe: true
 summary: A Liferay partner runs every deal through a Digital Sales Room on DXP 2026.Q4. Room templates per deal type, automated room setup, a public estimator that saves into a room, English and Japanese, a Salesforce panel with write-back, and buyer engagement analytics.
 description: Build a partner sales demo on Liferay DXP 2026.Q4 with Digital Sales Room. Templates, object-action automation, a public estimator, Japanese, a Salesforce client extension and analytics.
 tags: [Digital Sales Room, DSR, Liferay DXP 2026.Q4, Client Extensions, Objects, New CMS, MCP, Japanese]
