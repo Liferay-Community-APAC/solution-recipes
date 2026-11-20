@@ -156,7 +156,7 @@ In 2026.Q4.0, DSR blocks placed through `headless-admin-site` save but do not re
 
 1. Click **Save**. The room opens in the page editor, where you can tailor it before you invite anyone.
 
-   [![A new room in the page editor.](room-editor.png){: .screenshot }](room-editor.png)
+   [![The Contoso Insurance room's Onboarding page in the page editor, with the template's tabs and the account executive's welcome.](room-editor.png){: .screenshot }](room-editor.png)
 
 Seconds later, the object action has added the template pages and the personal welcome:
 
@@ -183,7 +183,7 @@ The demo uses one room for each kind of story a partner meets:
 
 **Documents.** Upload the deal's proposal, draft SOW and mutual action plan, plus shared collateral such as the security overview, under **Documents**. Each document stays inside its room, and every preview and download counts in the analytics. ([Managing Room Documents](https://learn.liferay.com/w/digital-sales-room/managing-room-documents))
 
-[![A room's Documents tab with the services proposal, the solution overview and the mutual action plan.](room-documents.png){: .screenshot }](room-documents.png)
+[![The Contoso Insurance room's Documents tab: Contoso's own mutual action plan and services proposal next to shared collateral such as the Liferay platform security overview.](room-documents.png){: .screenshot }](room-documents.png)
 
 **Invite by role, with an end date.** Click **Share**, enter emails, pick a role and optionally set **Access Valid Until**. Access then ends at the end of that day (UTC). Invitations are valid for 48 hours.
 
@@ -193,11 +193,11 @@ The demo uses one room for each kind of story a partner meets:
 | Solutions architect, delivery lead | **Content Contributor**: view, comment, upload, share |
 | Other buyers, outside advisors | **Viewer**: view and comment |
 
-[![The Share dialog: a buyer's email, Access Valid Until, and the three room roles.](share-roles.png){: .screenshot }](share-roles.png)
+[![Sharing the Contoso Insurance room: a buyer's email, Access Valid Until, the three room roles, and the seller team and buyers who already have access.](share-roles.png){: .screenshot }](share-roles.png)
 
 **Comments.** Use the speech-bubble icon in the room header for questions and answers, with @mentions, so they stay out of email. ([Room Comments](https://learn.liferay.com/w/digital-sales-room/room-comments))
 
-[![Room Comments: the seller's note to the buyer, with Reply and votes.](room-comments.png){: .screenshot }](room-comments.png)
+[![Room Comments in the Contoso Insurance room: the seller asks the buyer to review the proposal and SOW with procurement, with Reply and votes.](room-comments.png){: .screenshot }](room-comments.png)
 
 **Close it out.** When a deal is lost, set the trend to *Closed Lost* and **Archive** the room. Archiving can be undone. It makes the room read-only for buyers and keeps the history for the loss review. **Duplicate** copies the pages and the documents you choose into a new room, without comments or members.
 
